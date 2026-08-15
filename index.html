@@ -3,27 +3,182 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5f8f6">
+<meta name="theme-color" content="#128a47">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Gewicht">
-<title>Gewicht Tracker</title>
+<meta name="apple-mobile-web-app-title" content="Heute Peppe">
+<link rel="manifest" href="manifest.json">
+<title>HEUTE</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:#17352a;background:#eaf1ed}*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(circle at top,#fff 0,#edf4f0 38%,#e6eeea 100%)}button,input{font:inherit}.app-shell{min-height:100dvh;display:flex;justify-content:center}.phone{width:100%;max-width:480px;min-height:100dvh;background:#f5f8f6;padding:calc(env(safe-area-inset-top) + 20px) 18px calc(env(safe-area-inset-bottom) + 92px);position:relative}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.topbar small{letter-spacing:1.4px;color:#2a9b68;font-weight:800;font-size:11px}.topbar h1{font-size:30px;margin:4px 0 0;letter-spacing:-1px}.icon{border:0;background:#fff;border-radius:50%;height:42px;width:42px;font-size:20px;box-shadow:0 5px 18px #17352a12}.hero{background:linear-gradient(145deg,#d9f4e6,#bfead7);padding:22px;border-radius:27px;box-shadow:0 12px 30px #277f5b14;margin-bottom:14px}.hero span,.stats span,.card p,.entry span{color:#6d8179;font-size:13px}.hero strong{display:block;font-size:43px;letter-spacing:-1.5px;margin:7px 0}.good{color:#168a56!important}.warn{color:#b96349!important}.primary{width:100%;border:0;border-radius:16px;background:#17955f;color:#fff;font-weight:800;padding:15px 18px;margin-top:16px;box-shadow:0 7px 18px #17955f30}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stats article{background:#fff;border-radius:19px;padding:15px 12px;box-shadow:0 6px 22px #17352a0a;min-width:0}.stats b{font-size:17px;display:block;margin-top:6px}.card{background:#fff;border-radius:23px;padding:18px;margin:14px 0;box-shadow:0 7px 24px #17352a0b}.card.full{min-height:65vh}.section-head{display:flex;align-items:center;justify-content:space-between}.section-head h2,.card h2,.sheet h2{margin:0;font-size:19px}.textbtn,.danger,.reset{border:0;background:none}.textbtn{color:#188b5a;font-weight:700}.chart{display:block;width:100%;height:auto;margin-top:8px}.grid{stroke:#e8efeb;stroke-width:1}.line{stroke:#159361;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.dot{fill:#fff;stroke:#159361;stroke-width:3}.progress{height:11px;border-radius:999px;background:#e4ede8;overflow:hidden;margin:16px 0 7px}.progress i{display:block;height:100%;background:#1b9863;border-radius:inherit}.entry{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf2ef;padding:14px 2px}.entry div{display:flex;flex-direction:column;gap:4px}.entry b{font-size:17px}.danger{color:#b96349;font-weight:700}.reset{color:#7f8f88;margin-top:24px;width:100%;padding:10px}.empty{text-align:center;color:#71837c;padding:28px 0}nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;background:#ffffffed;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e9efeb;padding:8px 24px calc(env(safe-area-inset-bottom) + 9px);display:grid;grid-template-columns:repeat(3,1fr);z-index:4}nav button{border:0;background:none;color:#7c8b85;font-size:21px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}nav button span{font-size:10px}nav .active{color:#159361}.overlay{position:fixed;z-index:10;inset:0;background:#0d251c66;display:flex;align-items:flex-end;justify-content:center}.sheet{width:100%;max-width:480px;background:#f8fbf9;border-radius:28px 28px 0 0;padding:14px 22px calc(env(safe-area-inset-bottom) + 28px);box-shadow:0 -20px 60px #0002}.grab{height:5px;width:42px;border-radius:9px;background:#cbd8d2;margin:0 auto 18px}.sheet label{display:block;color:#687c74;font-weight:700;font-size:13px;margin:18px 0 6px}.sheet input[type=date]{width:100%;border:1px solid #dde8e2;background:#fff;padding:14px;border-radius:14px;color:#17352a}.weight-input{display:flex;align-items:center;background:#fff;border:1px solid #dde8e2;border-radius:18px;padding:10px 16px}.weight-input input{min-width:0;width:100%;border:0;outline:0;background:transparent;font-size:42px;font-weight:800;color:#17352a;text-align:center}.weight-input span{font-size:18px;color:#71837c}.secondary{width:100%;border:0;background:transparent;color:#667a72;font-weight:700;padding:14px;margin-top:4px}@media(min-width:700px){.app-shell{padding:34px}.phone{min-height:850px;border-radius:46px;box-shadow:0 32px 90px #163c2e2b;border:8px solid #1a1d1b;overflow:hidden}nav{bottom:34px;border-radius:0 0 37px 37px}}
+:root{--green:#128a47;--dark:#08110d;--cream:#fff7e7}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--green);color:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{padding:max(12px,env(safe-area-inset-top)) 9px max(20px,env(safe-area-inset-bottom));min-height:100vh}
+main{max-width:900px;margin:auto}
+h1{text-align:center;font-size:56px;font-style:italic;margin:13px 0 16px;line-height:1}
+.grid{display:grid;gap:8px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.five{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:8px}
+.task{appearance:none;-webkit-appearance:none;width:100%;position:relative;min-height:145px;border:3px solid var(--c);border-radius:18px;background:var(--dark);color:var(--cream);padding:13px 5px 9px;text-align:center;touch-action:manipulation;cursor:pointer}
+.task.done{background:#17221c}.task.done:after{content:"✓";position:absolute;right:9px;bottom:5px;font-size:29px;font-weight:900;color:var(--c)}
+.box{position:absolute;left:8px;top:8px;width:23px;height:23px;border:2px solid var(--c);border-radius:4px}.done .box{background:var(--c)}
+.icon{font-size:33px}.name{font-size:17px;font-weight:800;margin-top:5px}.meta{font-size:12px;line-height:1.3;margin-top:2px}.pts{font-size:12px;font-weight:900;color:var(--c);margin-top:3px}.heart{font-size:23px;color:#ffc72c}
+.score,.calendarBox{background:var(--dark);border-radius:19px;padding:14px;margin-top:14px}
+.scoreTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.score strong{font-size:32px}.score small{display:block;opacity:.7}.track{height:11px;background:#ffffff20;border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;background:#ffc72c;width:0;transition:width .15s}
+button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;border-radius:99px;padding:9px 12px;font-size:14px;touch-action:manipulation}
+.calHead{display:flex;align-items:center;justify-content:space-between;gap:8px}.calHead h2{margin:0;font-size:21px}.nav{display:flex;gap:5px}.month{text-align:center;font-weight:800;margin:12px 0}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.dow{text-align:center;font-size:11px;opacity:.65;padding:3px}
+.day{appearance:none;-webkit-appearance:none;aspect-ratio:1;border:1px solid #ffffff22;background:#ffffff0a;color:white;border-radius:11px;padding:2px;display:flex;flex-direction:column;justify-content:center;align-items:center;touch-action:manipulation}
+.day.today{outline:2px solid white}.day.has{background:#ffc72c30}.day.high{background:#16c7b455}.day .num{font-weight:800}.day .val{font-size:9px;margin-top:2px}
+.detail{margin-top:10px;background:#ffffff0b;border-radius:12px;padding:10px;font-size:13px;min-height:44px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.stat{text-align:center;background:#ffffff0a;border-radius:11px;padding:8px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;opacity:.7}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.note{text-align:center;font-size:12px;margin:9px 0;opacity:.9}
+.editPast{margin-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.editPast input{width:74px;background:#ffffff0a;color:white;border:1px solid #ffffff35;border-radius:10px;padding:8px;font-size:14px}
+.editPast label{font-size:12px;opacity:.8}
+
+
+.day.score-red{background:#e53935;color:#fff;border-color:#e53935}
+.day.score-orange{background:#f57c00;color:#fff;border-color:#f57c00}
+.day.score-yellow{background:#fbc02d;color:#16120a;border-color:#fbc02d}
+.day.score-green{background:#43a047;color:#fff;border-color:#43a047}
+.day.score-purple{background:#8e44d8;color:#fff;border-color:#8e44d8}
+.day.today{box-shadow:inset 0 0 0 2px #fff}
+
+@media(max-width:650px){
+h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.five .task{min-height:112px}.icon{font-size:27px}.name{font-size:14px}.meta,.pts{font-size:10px}.five .name{font-size:10.5px}.five .meta,.five .pts{font-size:9px}.five .icon{font-size:22px}.box{width:20px;height:20px}.calendar{gap:3px}.day{border-radius:8px}
+}
 </style>
 </head>
-<body>
-<div class="app-shell"><main class="phone"><header class="topbar"><div><small>GEWICHT TRACKER</small><h1 id="title">Dein Fortschritt</h1></div><button class="icon" id="goalBtn" aria-label="Ziel ändern">⚙︎</button></header><div id="content"></div><nav><button data-screen="home" class="active">⌂<span>Heute</span></button><button data-screen="chart">⌁<span>Verlauf</span></button><button data-screen="history">▤<span>Einträge</span></button></nav></main></div><div id="modal"></div>
+<body><main>
+<section class="grid three">
+<button class="task" data-id="sport" data-points="3" data-name="Sport" style="--c:#ff5757"><span class="box"></span><div class="icon">🏋️</div><div class="name">Sport</div><div class="meta">45 min</div><div class="pts">3 Punkte</div></button>
+<button class="task" data-id="todo" data-points="2" data-name="To Do's" style="--c:#ff8a00"><span class="box"></span><div class="icon">☑️</div><div class="name">To Do's</div><div class="meta">je nach dem</div><div class="pts">2 Punkte</div></button>
+<button class="task" data-id="projekt" data-points="2" data-name="Projekt" style="--c:#45a9ff"><span class="box"></span><div class="icon">💻</div><div class="name">Projekt</div><div class="meta">120 min · je nach dem</div><div class="pts">2 Punkte</div></button>
+</section>
+<h1>HEUTE ♡</h1>
+<section class="grid three">
+<button class="task" data-id="meditation" data-points="1" data-name="Meditation" style="--c:#9abd00"><span class="box"></span><div class="icon">🪷</div><div class="name">Meditation</div><div class="meta">10 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="stretching" data-points="1" data-name="Stretching" style="--c:#ffd000"><span class="box"></span><div class="icon">🤸</div><div class="name">Stretching</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="nem" data-points="1" data-name="NEM & Eiweiß" style="--c:#9d63df"><span class="box"></span><div class="icon">💊</div><div class="name">NEM &amp; Eiweiß</div><div class="meta">5 min</div><div class="pts">1 Punkt</div></button>
+</section>
+<section class="grid five">
+<button class="task" data-id="lesen" data-points="1" data-name="Buch lesen" style="--c:#16c7b4"><span class="box"></span><div class="icon">📖</div><div class="name">Buch lesen</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="spaziergang" data-points="1" data-name="Spaziergang" style="--c:#8eb200"><span class="box"></span><div class="icon">🌳</div><div class="name">Spaziergang</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="weiterbildung" data-points="1" data-name="Weiterbildung" style="--c:#53a9f0"><span class="box"></span><div class="icon">🎓</div><div class="name">Weiterbildung</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="familie" data-points="0" data-name="Familie" style="--c:#ff3f7a"><span class="box"></span><div class="icon">👨‍👩‍👧</div><div class="name">Familie</div><div class="heart">♡</div></button>
+<button class="task" data-id="freunde" data-points="0" data-name="Freunde" style="--c:#ff6eae"><span class="box"></span><div class="icon">🫂</div><div class="name">Freunde</div><div class="heart">♡</div></button>
+</section>
+
+<section class="score">
+<div class="scoreTop"><div><small>PUNKTE HEUTE</small><strong><span id="score">0</span> / 13</strong></div><button id="reset" class="control" type="button">Heute löschen</button></div>
+<div class="track"><div id="fill" class="fill"></div></div>
+</section>
+
+<section class="calendarBox">
+<div class="calHead"><h2>Kalender</h2><div class="nav"><button id="prev" class="control">‹</button><button id="now" class="control">Heute</button><button id="next" class="control">›</button></div></div>
+<div id="month" class="month"></div><div id="cal" class="calendar"></div>
+<div id="detail" class="detail">Tippe auf einen Tag.</div>
+<div class="stats"><div class="stat"><b id="avg">0</b><span>Ø Punkte</span></div><div class="stat"><b id="best">0</b><span>Bester Tag</span></div><div class="stat"><b id="active">0</b><span>Aktive Tage</span></div></div>
+<div class="actions"><button id="backup" class="control">Backup exportieren</button><button id="csv" class="control">CSV exportieren</button></div>
+</section>
+<p class="note">Die Daten werden lokal auf diesem Gerät gespeichert.</p>
+</main>
 <script>
-const seed=[['2026-08-06',83.6],['2026-08-07',83.3],['2026-08-08',83.1],['2026-08-09',82.9],['2026-08-10',83.0],['2026-08-11',82.7],['2026-08-12',82.6],['2026-08-13',82.4]].map((x,i)=>({id:'demo-'+i,date:x[0],weight:x[1]}));
-let entries=JSON.parse(localStorage.getItem('gewicht.entries')||'null')||seed;let goal=Number(localStorage.getItem('gewicht.goal')||78);let screen='home';
-const $=s=>document.querySelector(s), fmt=n=>Number(n).toFixed(1).replace('.',','), today=()=>new Date().toISOString().slice(0,10), dateFmt=(d,opt={day:'2-digit',month:'short'})=>new Intl.DateTimeFormat('de-DE',opt).format(new Date(d+'T12:00:00'));
-function save(){localStorage.setItem('gewicht.entries',JSON.stringify(entries));localStorage.setItem('gewicht.goal',goal)}function sorted(){return [...entries].sort((a,b)=>a.date.localeCompare(b.date))}
-function stats(){const a=sorted(),latest=a.at(-1)?.weight??null,first=a[0]?.weight??latest,seven=a.slice(-7),avg=seven.length?seven.reduce((s,e)=>s+e.weight,0)/seven.length:null,change=a.length>1?latest-a.at(-2).weight:0,trend=seven.length>1?seven.at(-1).weight-seven[0].weight:0,progress=latest!=null&&first!==goal?Math.max(0,Math.min(1,(first-latest)/(first-goal))):0;return{a,latest,first,seven,avg,change,trend,progress}}
-function chart(a){const data=a.slice(-12);if(data.length<2)return '<div class="empty">Mindestens zwei Einträge für den Verlauf.</div>';const vals=data.map(e=>e.weight),min=Math.min(...vals)-.4,max=Math.max(...vals)+.4,W=640,H=230,p=24,pts=data.map((e,i)=>({x:p+i*(W-2*p)/(data.length-1),y:p+(max-e.weight)*(H-2*p)/(max-min)})),poly=pts.map(p=>p.x+','+p.y).join(' '),gr=[0,1,2,3].map(i=>`<line x1="${p}" x2="${W-p}" y1="${p+i*(H-2*p)/3}" y2="${p+i*(H-2*p)/3}" class="grid"/>`).join(''),dots=pts.map((q,i)=>`<circle cx="${q.x}" cy="${q.y}" r="${i===pts.length-1?7:4}" class="dot"/>`).join('');return `<svg class="chart" viewBox="0 0 ${W} ${H}">${gr}<polyline points="${poly}" fill="none" class="line"/>${dots}</svg>`}
-function render(){const s=stats();$('#title').textContent=screen==='home'?'Dein Fortschritt':screen==='history'?'Einträge':'Verlauf';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.screen===screen));let h='';if(screen==='home'){h=`<section class="hero"><span>Aktuelles Gewicht</span><strong>${s.latest?fmt(s.latest)+' kg':'–'}</strong><div class="${s.change<=0?'good':'warn'}">${s.change>0?'+':''}${fmt(s.change)} kg seit letztem Eintrag</div><button class="primary" id="addBtn">＋ Gewicht eintragen</button></section><section class="stats"><article><span>7-Tage-Ø</span><b>${s.avg?fmt(s.avg)+' kg':'–'}</b></article><article><span>Zielgewicht</span><b>${fmt(goal)} kg</b></article><article><span>Trend</span><b class="${s.trend<=0?'good':'warn'}">${s.trend>0?'+':''}${fmt(s.trend)} kg</b></article></section><section class="card"><div class="section-head"><h2>Verlauf</h2><button class="textbtn" data-go="chart">Details</button></div>${chart(s.a)}</section><section class="card"><div class="section-head"><h2>Zum Ziel</h2><b>${Math.round(s.progress*100)}%</b></div><div class="progress"><i style="width:${Math.max(2,s.progress*100)}%"></i></div><p>${s.latest?'Noch '+fmt(Math.max(0,s.latest-goal))+' kg bis zum Ziel.':'Trage dein erstes Gewicht ein.'}</p></section><section class="card"><div class="section-head"><h2>Letzte Einträge</h2><button class="textbtn" data-go="history">Alle</button></div>${s.a.slice(-4).reverse().map(e=>`<div class="entry"><span>${dateFmt(e.date)}</span><b>${fmt(e.weight)} kg</b></div>`).join('')}</section>`}else if(screen==='chart'){const low=s.a.length?fmt(Math.min(...s.a.map(e=>e.weight)))+' kg':'–',high=s.a.length?fmt(Math.max(...s.a.map(e=>e.weight)))+' kg':'–';h=`<section class="card full">${chart(s.a)}<div class="stats"><article><span>Tiefster Wert</span><b>${low}</b></article><article><span>Höchster Wert</span><b>${high}</b></article><article><span>7-Tage-Ø</span><b>${s.avg?fmt(s.avg)+' kg':'–'}</b></article></div><h2>7-Tage-Trend</h2><p class="${s.trend<=0?'good':'warn'}">${s.trend>0?'+':''}${fmt(s.trend)} kg</p></section>`}else{h=`<section class="card full"><button class="primary" id="addBtn">＋ Neuer Eintrag</button>${s.a.length?'':'<p class="empty">Noch keine Einträge.</p>'}${s.a.slice().reverse().map(e=>`<div class="entry"><div><span>${dateFmt(e.date,{weekday:'short',day:'2-digit',month:'long'})}</span><b>${fmt(e.weight)} kg</b></div><button class="danger" data-del="${e.id}">Löschen</button></div>`).join('')}<button class="reset" id="resetBtn">Testdaten löschen</button></section>`}$('#content').innerHTML=h;$('#addBtn')?.addEventListener('click',()=>weightModal());document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{screen=b.dataset.go;render()});document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{entries=entries.filter(e=>e.id!==b.dataset.del);save();render()});$('#resetBtn')?.addEventListener('click',()=>{if(confirm('Alle lokalen Testdaten löschen?')){entries=[];save();render()}})}
-function weightModal(){ $('#modal').innerHTML=`<div class="overlay" id="overlay"><div class="sheet"><div class="grab"></div><h2>Gewicht eintragen</h2><label>Datum<input type="date" id="date" value="${today()}"></label><label>Gewicht<div class="weight-input"><input inputmode="decimal" id="weight" placeholder="82,4"><span>kg</span></div></label><button class="primary" id="saveWeight">Speichern</button><button class="secondary" id="cancel">Abbrechen</button></div></div>`;$('#cancel').onclick=closeModal;$('#overlay').onclick=e=>{if(e.target.id==='overlay')closeModal()};$('#saveWeight').onclick=()=>{const n=Number($('#weight').value.replace(',','.')),d=$('#date').value;if(!(n>=30&&n<=400))return alert('Bitte gib ein realistisches Gewicht ein.');const same=entries.find(e=>e.date===d);entries=same?entries.map(e=>e.date===d?{...e,weight:n}:e):[...entries,{id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())),date:d,weight:n}];save();closeModal();render()}}
-function goalModal(){ $('#modal').innerHTML=`<div class="overlay" id="overlay"><div class="sheet"><div class="grab"></div><h2>Zielgewicht</h2><div class="weight-input"><input inputmode="decimal" id="goal" value="${String(goal).replace('.',',')}"><span>kg</span></div><button class="primary" id="saveGoal">Ziel speichern</button><button class="secondary" id="cancel">Abbrechen</button></div></div>`;$('#cancel').onclick=closeModal;$('#overlay').onclick=e=>{if(e.target.id==='overlay')closeModal()};$('#saveGoal').onclick=()=>{const n=Number($('#goal').value.replace(',','.'));if(!(n>=30&&n<=400))return alert('Bitte gib ein realistisches Ziel ein.');goal=n;save();closeModal();render()}}
-function closeModal(){$('#modal').innerHTML=''}document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{screen=b.dataset.screen;render()});$('#goalBtn').onclick=goalModal;render();
+(function(){
+"use strict";
+var tasks=Array.prototype.slice.call(document.querySelectorAll(".task"));
+var scoreEl=document.getElementById("score"), fill=document.getElementById("fill"), cal=document.getElementById("cal"), monthEl=document.getElementById("month"), detail=document.getElementById("detail");
+var KEY="heute_tracker_fixed_v1", MAX=13, db={days:{}};
+var view=new Date(); view=new Date(view.getFullYear(),view.getMonth(),1);
+
+function key(d){var y=d.getFullYear(),m=("0"+(d.getMonth()+1)).slice(-2),n=("0"+d.getDate()).slice(-2);return y+"-"+m+"-"+n}
+function today(){return key(new Date())}
+function load(){try{var x=localStorage.getItem(KEY);if(x)db=JSON.parse(x)}catch(e){} if(!db||!db.days)db={days:{}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+function dayData(k){return db.days[k]||{done:{},score:0}}
+function calc(){
+ var s=0; tasks.forEach(function(t){if(t.classList.contains("done"))s+=Number(t.getAttribute("data-points"))||0});
+ return s;
+}
+function persist(){
+ var done={};tasks.forEach(function(t){done[t.getAttribute("data-id")]=t.classList.contains("done")});
+ db.days[today()]={done:done,score:calc(),updated:new Date().toISOString()};save();
+}
+function paint(){
+ var s=calc();scoreEl.textContent=s;fill.style.width=((s/MAX)*100)+"%";
+}
+function syncToday(){
+ var d=dayData(today());tasks.forEach(function(t){t.classList.toggle("done",!!d.done[t.getAttribute("data-id")])});paint();
+}
+function clickTask(e){
+ var t=e.currentTarget;t.classList.toggle("done");paint();persist();render();
+}
+tasks.forEach(function(t){t.addEventListener("click",clickTask,false);t.addEventListener("touchend",function(){},false)});
+
+document.getElementById("reset").addEventListener("click",function(){
+ tasks.forEach(function(t){t.classList.remove("done")});paint();persist();render();
+});
+
+function render(){
+ cal.innerHTML="";
+ ["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(function(x){var z=document.createElement("div");z.className="dow";z.textContent=x;cal.appendChild(z)});
+ var y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0),offset=(first.getDay()+6)%7;
+ monthEl.textContent=view.toLocaleDateString("de-DE",{month:"long",year:"numeric"});
+ for(var i=0;i<offset;i++){var blank=document.createElement("div");cal.appendChild(blank)}
+ var sum=0,best=0,active=0;
+ for(var n=1;n<=last.getDate();n++){
+   var d=new Date(y,m,n),k=key(d),data=dayData(k),s=Number(data.score)||0;
+   var recorded=Object.prototype.hasOwnProperty.call(db.days,k);
+   var any=recorded || (data.done&&Object.keys(data.done).some(function(id){return data.done[id]})) || s>0;
+   if(any){active++;sum+=s} if(s>best)best=s;
+   var colorClass="";
+   if(recorded){
+     if(s<=3) colorClass=" score-red";
+     else if(s<=5) colorClass=" score-orange";
+     else if(s<=7) colorClass=" score-yellow";
+     else if(s<=10) colorClass=" score-green";
+     else colorClass=" score-purple";
+   }
+   var b=document.createElement("button");b.type="button";b.className="day"+(k===today()?" today":"")+colorClass;
+   b.innerHTML='<span class="num">'+n+'</span><span class="val">'+(recorded?s+"/13":"–")+"</span>";
+   (function(dateKey){b.addEventListener("click",function(){show(dateKey)},false)})(k);
+   cal.appendChild(b);
+ }
+ document.getElementById("avg").textContent=active?(sum/active).toFixed(1).replace(".",","):"0";
+ document.getElementById("best").textContent=best;document.getElementById("active").textContent=active;
+}
+function show(k){
+ var d=dayData(k), names=[];
+ tasks.forEach(function(t){if(d.done&&d.done[t.getAttribute("data-id")])names.push(t.getAttribute("data-name"))});
+ var dt=new Date(k+"T12:00:00");
+ var isPast=k<today();
+ detail.innerHTML="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b><br>"+(names.length?"Erledigt: "+names.join(", "):"Keine Aufgaben gespeichert.");
+ if(isPast){
+   var wrap=document.createElement("div");wrap.className="editPast";
+   var label=document.createElement("label");label.textContent="Punkte nachtragen:";
+   var input=document.createElement("input");input.type="number";input.min="0";input.max="13";input.step="1";input.value=String(d.score||0);input.inputMode="numeric";
+   var saveBtn=document.createElement("button");saveBtn.type="button";saveBtn.className="control";saveBtn.textContent="Speichern";
+   saveBtn.addEventListener("click",function(){
+      var v=parseInt(input.value,10);
+      if(isNaN(v))v=0;
+      v=Math.max(0,Math.min(13,v));
+      var existing=dayData(k);
+      db.days[k]={done:existing.done||{},score:v,updated:new Date().toISOString(),manual:true};
+      save();render();show(k);
+   });
+   wrap.appendChild(label);wrap.appendChild(input);wrap.appendChild(saveBtn);detail.appendChild(wrap);
+ }
+}
+document.getElementById("prev").addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()-1,1);render()});
+document.getElementById("next").addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()+1,1);render()});
+document.getElementById("now").addEventListener("click",function(){var d=new Date();view=new Date(d.getFullYear(),d.getMonth(),1);render();show(today())});
+
+function dl(name,text,type){var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},500)}
+document.getElementById("backup").addEventListener("click",function(){dl("HEUTE-Backup-"+today()+".json",JSON.stringify(db,null,2),"application/json")});
+document.getElementById("csv").addEventListener("click",function(){
+ var rows=[["Datum","Punkte"]];Object.keys(db.days).sort().forEach(function(k){rows.push([k,db.days[k].score||0])});
+ var text=rows.map(function(r){return r.join(";")}).join("\n");dl("HEUTE-Kalender-"+today()+".csv","\ufeff"+text,"text/csv;charset=utf-8");
+});
+load();syncToday();render();show(today());
+})();
 </script>
 </body></html>
