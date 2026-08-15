@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#128a47">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Heute Peppe">
+<link rel="manifest" href="manifest.json">
+<title>HEUTE</title>
+<style>
+:root{--green:#128a47;--dark:#08110d;--cream:#fff7e7}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--green);color:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{padding:max(12px,env(safe-area-inset-top)) 9px max(20px,env(safe-area-inset-bottom));min-height:100vh}
+main{max-width:900px;margin:auto}
+h1{text-align:center;font-size:56px;font-style:italic;margin:13px 0 16px;line-height:1}
+.grid{display:grid;gap:8px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.five{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:8px}
+.task{appearance:none;-webkit-appearance:none;width:100%;position:relative;min-height:145px;border:3px solid var(--c);border-radius:18px;background:var(--dark);color:var(--cream);padding:13px 5px 9px;text-align:center;touch-action:manipulation;cursor:pointer}
+.task.done{background:#17221c}.task.done:after{content:"✓";position:absolute;right:9px;bottom:5px;font-size:29px;font-weight:900;color:var(--c)}
+.box{position:absolute;left:8px;top:8px;width:23px;height:23px;border:2px solid var(--c);border-radius:4px}.done .box{background:var(--c)}
+.icon{font-size:33px}.name{font-size:17px;font-weight:800;margin-top:5px}.meta{font-size:12px;line-height:1.3;margin-top:2px}.pts{font-size:12px;font-weight:900;color:var(--c);margin-top:3px}.heart{font-size:23px;color:#ffc72c}
+.score,.calendarBox{background:var(--dark);border-radius:19px;padding:14px;margin-top:14px}
+.scoreTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.score strong{font-size:32px}.score small{display:block;opacity:.7}.track{height:11px;background:#ffffff20;border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;background:#ffc72c;width:0;transition:width .15s}
+button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;border-radius:99px;padding:9px 12px;font-size:14px;touch-action:manipulation}
+.calHead{display:flex;align-items:center;justify-content:space-between;gap:8px}.calHead h2{margin:0;font-size:21px}.nav{display:flex;gap:5px}.month{text-align:center;font-weight:800;margin:12px 0}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.dow{text-align:center;font-size:11px;opacity:.65;padding:3px}
+.day{appearance:none;-webkit-appearance:none;aspect-ratio:1;border:1px solid #ffffff22;background:#ffffff0a;color:white;border-radius:11px;padding:2px;display:flex;flex-direction:column;justify-content:center;align-items:center;touch-action:manipulation}
+.day.today{outline:2px solid white}.day.has{background:#ffc72c30}.day.high{background:#16c7b455}.day .num{font-weight:800}.day .val{font-size:9px;margin-top:2px}
+.detail{margin-top:10px;background:#ffffff0b;border-radius:12px;padding:10px;font-size:13px;min-height:44px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.stat{text-align:center;background:#ffffff0a;border-radius:11px;padding:8px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;opacity:.7}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.note{text-align:center;font-size:12px;margin:9px 0;opacity:.9}
+.editPast{margin-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.editPast input{width:74px;background:#ffffff0a;color:white;border:1px solid #ffffff35;border-radius:10px;padding:8px;font-size:14px}
+.editPast label{font-size:12px;opacity:.8}
+
+
+.day.score-red{background:#e53935;color:#fff;border-color:#e53935}
+.day.score-orange{background:#f57c00;color:#fff;border-color:#f57c00}
+.day.score-yellow{background:#fbc02d;color:#16120a;border-color:#fbc02d}
+.day.score-green{background:#43a047;color:#fff;border-color:#43a047}
+.day.score-purple{background:#8e44d8;color:#fff;border-color:#8e44d8}
+.day.today{box-shadow:inset 0 0 0 2px #fff}
+
+@media(max-width:650px){
+h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.five .task{min-height:112px}.icon{font-size:27px}.name{font-size:14px}.meta,.pts{font-size:10px}.five .name{font-size:10.5px}.five .meta,.five .pts{font-size:9px}.five .icon{font-size:22px}.box{width:20px;height:20px}.calendar{gap:3px}.day{border-radius:8px}
+}
+</style>
+</head>
+<body><main>
+<section class="grid three">
+<button class="task" data-id="sport" data-points="3" data-name="Sport" style="--c:#ff5757"><span class="box"></span><div class="icon">🏋️</div><div class="name">Sport</div><div class="meta">45 min</div><div class="pts">3 Punkte</div></button>
+<button class="task" data-id="todo" data-points="2" data-name="To Do's" style="--c:#ff8a00"><span class="box"></span><div class="icon">☑️</div><div class="name">To Do's</div><div class="meta">je nach dem</div><div class="pts">2 Punkte</div></button>
+<button class="task" data-id="projekt" data-points="2" data-name="Projekt" style="--c:#45a9ff"><span class="box"></span><div class="icon">💻</div><div class="name">Projekt</div><div class="meta">120 min · je nach dem</div><div class="pts">2 Punkte</div></button>
+</section>
+<h1>HEUTE ♡</h1>
+<section class="grid three">
+<button class="task" data-id="meditation" data-points="1" data-name="Meditation" style="--c:#9abd00"><span class="box"></span><div class="icon">🪷</div><div class="name">Meditation</div><div class="meta">10 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="stretching" data-points="1" data-name="Stretching" style="--c:#ffd000"><span class="box"></span><div class="icon">🤸</div><div class="name">Stretching</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="nem" data-points="1" data-name="NEM & Eiweiß" style="--c:#9d63df"><span class="box"></span><div class="icon">💊</div><div class="name">NEM &amp; Eiweiß</div><div class="meta">5 min</div><div class="pts">1 Punkt</div></button>
+</section>
+<section class="grid five">
+<button class="task" data-id="lesen" data-points="1" data-name="Buch lesen" style="--c:#16c7b4"><span class="box"></span><div class="icon">📖</div><div class="name">Buch lesen</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="spaziergang" data-points="1" data-name="Spaziergang" style="--c:#8eb200"><span class="box"></span><div class="icon">🌳</div><div class="name">Spaziergang</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="weiterbildung" data-points="1" data-name="Weiterbildung" style="--c:#53a9f0"><span class="box"></span><div class="icon">🎓</div><div class="name">Weiterbildung</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
+<button class="task" data-id="familie" data-points="0" data-name="Familie" style="--c:#ff3f7a"><span class="box"></span><div class="icon">👨‍👩‍👧</div><div class="name">Familie</div><div class="heart">♡</div></button>
+<button class="task" data-id="freunde" data-points="0" data-name="Freunde" style="--c:#ff6eae"><span class="box"></span><div class="icon">🫂</div><div class="name">Freunde</div><div class="heart">♡</div></button>
+</section>
+
+<section class="score">
+<div class="scoreTop"><div><small>PUNKTE HEUTE</small><strong><span id="score">0</span> / 13</strong></div><button id="reset" class="control" type="button">Heute löschen</button></div>
+<div class="track"><div id="fill" class="fill"></div></div>
+</section>
+
+<section class="calendarBox">
+<div class="calHead"><h2>Kalender</h2><div class="nav"><button id="prev" class="control">‹</button><button id="now" class="control">Heute</button><button id="next" class="control">›</button></div></div>
+<div id="month" class="month"></div><div id="cal" class="calendar"></div>
+<div id="detail" class="detail">Tippe auf einen Tag.</div>
+<div class="stats"><div class="stat"><b id="avg">0</b><span>Ø Punkte</span></div><div class="stat"><b id="best">0</b><span>Bester Tag</span></div><div class="stat"><b id="active">0</b><span>Aktive Tage</span></div></div>
+<div class="actions"><button id="backup" class="control">Backup exportieren</button><button id="csv" class="control">CSV exportieren</button></div>
+</section>
+<p class="note">Die Daten werden lokal auf diesem Gerät gespeichert.</p>
+</main>
+<script>
+(function(){
+"use strict";
+var tasks=Array.prototype.slice.call(document.querySelectorAll(".task"));
+var scoreEl=document.getElementById("score"), fill=document.getElementById("fill"), cal=document.getElementById("cal"), monthEl=document.getElementById("month"), detail=document.getElementById("detail");
+var KEY="heute_tracker_fixed_v1", MAX=13, db={days:{}};
+var view=new Date(); view=new Date(view.getFullYear(),view.getMonth(),1);
+
+function key(d){var y=d.getFullYear(),m=("0"+(d.getMonth()+1)).slice(-2),n=("0"+d.getDate()).slice(-2);return y+"-"+m+"-"+n}
+function today(){return key(new Date())}
+function load(){try{var x=localStorage.getItem(KEY);if(x)db=JSON.parse(x)}catch(e){} if(!db||!db.days)db={days:{}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+function dayData(k){return db.days[k]||{done:{},score:0}}
+function calc(){
+ var s=0; tasks.forEach(function(t){if(t.classList.contains("done"))s+=Number(t.getAttribute("data-points"))||0});
+ return s;
+}
+function persist(){
+ var done={};tasks.forEach(function(t){done[t.getAttribute("data-id")]=t.classList.contains("done")});
+ db.days[today()]={done:done,score:calc(),updated:new Date().toISOString()};save();
+}
+function paint(){
+ var s=calc();scoreEl.textContent=s;fill.style.width=((s/MAX)*100)+"%";
+}
+function syncToday(){
+ var d=dayData(today());tasks.forEach(function(t){t.classList.toggle("done",!!d.done[t.getAttribute("data-id")])});paint();
+}
+function clickTask(e){
+ var t=e.currentTarget;t.classList.toggle("done");paint();persist();render();
+}
+tasks.forEach(function(t){t.addEventListener("click",clickTask,false);t.addEventListener("touchend",function(){},false)});
+
+document.getElementById("reset").addEventListener("click",function(){
+ tasks.forEach(function(t){t.classList.remove("done")});paint();persist();render();
+});
+
+function render(){
+ cal.innerHTML="";
+ ["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(function(x){var z=document.createElement("div");z.className="dow";z.textContent=x;cal.appendChild(z)});
+ var y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0),offset=(first.getDay()+6)%7;
+ monthEl.textContent=view.toLocaleDateString("de-DE",{month:"long",year:"numeric"});
+ for(var i=0;i<offset;i++){var blank=document.createElement("div");cal.appendChild(blank)}
+ var sum=0,best=0,active=0;
+ for(var n=1;n<=last.getDate();n++){
+   var d=new Date(y,m,n),k=key(d),data=dayData(k),s=Number(data.score)||0;
+   var recorded=Object.prototype.hasOwnProperty.call(db.days,k);
+   var any=recorded || (data.done&&Object.keys(data.done).some(function(id){return data.done[id]})) || s>0;
+   if(any){active++;sum+=s} if(s>best)best=s;
+   var colorClass="";
+   if(recorded){
+     if(s<=3) colorClass=" score-red";
+     else if(s<=5) colorClass=" score-orange";
+     else if(s<=7) colorClass=" score-yellow";
+     else if(s<=10) colorClass=" score-green";
+     else colorClass=" score-purple";
+   }
+   var b=document.createElement("button");b.type="button";b.className="day"+(k===today()?" today":"")+colorClass;
+   b.innerHTML='<span class="num">'+n+'</span><span class="val">'+(recorded?s+"/13":"–")+"</span>";
+   (function(dateKey){b.addEventListener("click",function(){show(dateKey)},false)})(k);
+   cal.appendChild(b);
+ }
+ document.getElementById("avg").textContent=active?(sum/active).toFixed(1).replace(".",","):"0";
+ document.getElementById("best").textContent=best;document.getElementById("active").textContent=active;
+}
+function show(k){
+ var d=dayData(k), names=[];
+ tasks.forEach(function(t){if(d.done&&d.done[t.getAttribute("data-id")])names.push(t.getAttribute("data-name"))});
+ var dt=new Date(k+"T12:00:00");
+ var isPast=k<today();
+ detail.innerHTML="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b><br>"+(names.length?"Erledigt: "+names.join(", "):"Keine Aufgaben gespeichert.");
+ if(isPast){
+   var wrap=document.createElement("div");wrap.className="editPast";
+   var label=document.createElement("label");label.textContent="Punkte nachtragen:";
+   var input=document.createElement("input");input.type="number";input.min="0";input.max="13";input.step="1";input.value=String(d.score||0);input.inputMode="numeric";
+   var saveBtn=document.createElement("button");saveBtn.type="button";saveBtn.className="control";saveBtn.textContent="Speichern";
+   saveBtn.addEventListener("click",function(){
+      var v=parseInt(input.value,10);
+      if(isNaN(v))v=0;
+      v=Math.max(0,Math.min(13,v));
+      var existing=dayData(k);
+      db.days[k]={done:existing.done||{},score:v,updated:new Date().toISOString(),manual:true};
+      save();render();show(k);
+   });
+   wrap.appendChild(label);wrap.appendChild(input);wrap.appendChild(saveBtn);detail.appendChild(wrap);
+ }
+}
+document.getElementById("prev").addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()-1,1);render()});
+document.getElementById("next").addEventListener("click",function(){view=new Date(view.getFullYear(),view.getMonth()+1,1);render()});
+document.getElementById("now").addEventListener("click",function(){var d=new Date();view=new Date(d.getFullYear(),d.getMonth(),1);render();show(today())});
+
+function dl(name,text,type){var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},500)}
+document.getElementById("backup").addEventListener("click",function(){dl("HEUTE-Backup-"+today()+".json",JSON.stringify(db,null,2),"application/json")});
+document.getElementById("csv").addEventListener("click",function(){
+ var rows=[["Datum","Punkte"]];Object.keys(db.days).sort().forEach(function(k){rows.push([k,db.days[k].score||0])});
+ var text=rows.map(function(r){return r.join(";")}).join("\n");dl("HEUTE-Kalender-"+today()+".csv","\ufeff"+text,"text/csv;charset=utf-8");
+});
+load();syncToday();render();show(today());
+})();
+</script>
+</body></html>
