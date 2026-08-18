@@ -39,6 +39,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .month{text-align:center;font-weight:800;margin:12px 0}.nav{display:flex;gap:5px}
 .detail{margin-top:10px;background:#ffffff0b;border-radius:12px;padding:10px;font-size:13px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px;padding:10px;background:#ffffff08;border-radius:12px;font-size:11px}.legendItem{display:flex;align-items:center;gap:5px}.swatch{width:15px;height:15px;border-radius:4px}
+.pastToggle{margin-top:10px;border:1px solid #ffffff25;border-radius:12px;background:#ffffff08;overflow:hidden}.pastToggle summary{list-style:none;cursor:pointer;padding:10px 12px;font-weight:800;touch-action:manipulation;display:flex;align-items:center;justify-content:space-between}.pastToggle summary::-webkit-details-marker{display:none}.pastToggle summary:after{content:"▼";font-size:12px;opacity:.8}.pastToggle[open] summary:after{content:"▲"}.pastToggle[open] summary{border-bottom:1px solid #ffffff18}.pastToggle .pastEditor{margin:8px}.pastToggle #savePast{margin:0 8px 8px}
 .pastEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:8px}
 .editRow{display:grid;grid-template-columns:minmax(0,1fr) 46px 14px;gap:4px;align-items:center;background:#ffffff08;border-radius:9px;padding:5px 6px;min-height:50px;height:50px;overflow:hidden}
 .editRow label{font-size:11px;line-height:1.05;display:flex;align-items:center;gap:4px;min-width:0}.editRow input[type=checkbox]{width:18px;height:18px;flex:0 0 auto}.editRow input[type=number]{width:46px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:7px;padding:5px;font-size:12px}
@@ -197,7 +198,7 @@ function renderCalendar(){
 function showDay(k){
  var d=dayData(k),dt=new Date(k+"T12:00:00"),box=document.getElementById("dayDetail");
  var html="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b>";
- html+='<div class="pastEditor">';
+ html+='<details class="pastToggle"><summary>Punkte nachtragen</summary><div class="pastEditor">';
  var order=["sport","todo","projekt","__blank__","meditation","stretching","nem","lesen","spaziergang","weiterbildung","familie","freunde"];
  var labels={meditation:"Medi-<br>tation",stretching:"Stret-<br>ching",spaziergang:"Spazier-<br>gang",weiterbildung:"Weiter-<br>bildung"};
  order.forEach(function(id){
@@ -206,7 +207,7 @@ function showDay(k){
    var done=!!(d.done&&d.done[id]);var p=(d.taskPoints&&d.taskPoints[id]!=null)?d.taskPoints[id]:defaultPoints(t);
    html+='<div class="editRow"><label><input class="pastDone" type="checkbox" data-id="'+id+'" '+(done?"checked":"")+'> <span>'+(labels[id]||t.dataset.name)+'</span></label><input class="pastPoints" type="number" data-id="'+id+'" min="0" max="13" step="1" value="'+p+'"><span>P</span></div>';
  });
- html+='</div><button id="savePast" class="control" type="button">Tag speichern</button>';
+ html+='</div><button id="savePast" class="control" type="button">Tag speichern</button></details>';
  box.innerHTML=html;
  document.getElementById("savePast").onclick=function(){
    var nd={done:{},taskPoints:{},score:0,updated:new Date().toISOString()};
