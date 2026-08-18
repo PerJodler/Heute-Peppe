@@ -32,6 +32,14 @@ h3{margin:14px 0 8px;font-size:16px}
 .icon{font-size:33px}.name{font-size:17px;font-weight:800;margin-top:5px}.meta{font-size:12px;line-height:1.3;margin-top:2px}.pts{font-size:12px;font-weight:900;color:var(--c);margin-top:3px}.heart{font-size:23px;color:#ffc72c}
 .panel,.score{background:var(--dark);border-radius:19px;padding:14px;margin-top:14px}
 .scoreTop,.panelHead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+
+.score.score-red{background:#e53935}
+.score.score-orange{background:#f57c00}
+.score.score-yellow{background:#fbc02d;color:#15110a}
+.score.score-green{background:#43a047}
+.score.score-purple{background:#8e44d8}
+.score.score-yellow button{color:#15110a;border-color:#15110a55}
+
 .score strong{font-size:32px}.score small{display:block;opacity:.7}.track{height:11px;background:#ffffff20;border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;background:#ffc72c;width:0;transition:width .15s}
 button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;border-radius:99px;padding:9px 12px;font-size:14px;touch-action:manipulation}
 .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.dow{text-align:center;font-size:11px;opacity:.65;padding:3px}
@@ -41,7 +49,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .month{text-align:center;font-weight:800;margin:12px 0}.nav{display:flex;gap:5px}
 .detail{margin-top:10px;background:#ffffff0b;border-radius:12px;padding:10px;font-size:13px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px;padding:10px;background:#ffffff08;border-radius:12px;font-size:11px}.legendItem{display:flex;align-items:center;gap:5px}.swatch{width:15px;height:15px;border-radius:4px}
-.pastEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.editRow{display:grid;grid-template-columns:1fr 62px 26px;gap:7px;align-items:center;background:#ffffff08;border-radius:10px;padding:7px}.editRow input[type=number]{width:62px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:8px;padding:7px}.editRow input[type=checkbox]{width:22px;height:22px}
+.pastEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.editRow{display:grid;grid-template-columns:minmax(0,1fr) 54px 20px;gap:6px;align-items:center;background:#ffffff08;border-radius:10px;padding:7px 8px;min-height:58px;height:58px;overflow:hidden}.editRow label{font-size:12px;line-height:1.15;display:flex;align-items:center;gap:5px;min-width:0}.editRow input[type=number]{width:54px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:8px;padding:6px}.editRow input[type=checkbox]{width:22px;height:22px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.stat{text-align:center;background:#ffffff0a;border-radius:11px;padding:8px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;opacity:.7}
 .habitForm{display:grid;grid-template-columns:1fr auto;gap:7px}.habitForm input[type=text]{min-width:0;background:#ffffff0a;color:white;border:1px solid #ffffff35;border-radius:12px;padding:11px;font-size:15px}
 .habitList{display:grid;gap:8px;margin-top:10px}.habitRow{background:#08110d;border:2px solid var(--hc);border-radius:16px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}.habitToggle{width:28px;height:28px;border:2px solid var(--hc);border-radius:6px;background:transparent;color:white;font-weight:900}.habitRow.done{background:#17301f}.habitName{font-weight:800}.habitControls{display:flex;align-items:center;gap:5px}.habitControls button{background:#ffffff0b;color:white;border:1px solid #ffffff25;border-radius:8px;padding:5px 7px}.habitControls input[type=color]{width:30px;height:30px;border:0;background:none;padding:0}
@@ -114,7 +122,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <h2>Verlauf der Gesamtpunkte</h2>
 <div id="overallChart" class="chartBox"></div>
 <p class="chartLabel">Gesamtpunkte pro gespeichertem Tag. Datum und Punktwert werden direkt an der Kurve angezeigt.</p>
-<h3>Aufgaben</h3>
+<h3>Aufgaben &amp; Habits</h3>
 <div id="entryTasks" class="entryList"></div>
 <div id="taskEntryDetail"></div>
 </section>
@@ -131,6 +139,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <button id="importBackup">Backup importieren</button>
 <input id="importFile" type="file" accept=".json,application/json" hidden>
 </div>
+<p class="note" style="margin-top:18px;text-align:center">Copyright © 2026 Peppe Mobilia. Alle Rechte vorbehalten.</p>
 </section>
 </section>
 
@@ -173,12 +182,13 @@ function persistToday(){
 }
 function updateScore(saveIt){
  var d=dayData(today()),s=0;tasks.forEach(function(t){if(t.classList.contains("done")){var p=(d.taskPoints&&d.taskPoints[t.dataset.id]!=null)?Number(d.taskPoints[t.dataset.id]):defaultPoints(t);s+=p||0}});
- document.getElementById("score").textContent=s;document.getElementById("fill").style.width=(Math.min(13,s)/13*100)+"%";if(saveIt){persistToday();renderCalendar();renderEntries()}
+ document.getElementById("score").textContent=s;document.getElementById("fill").style.width=(Math.min(13,s)/13*100)+"%";paintScoreColor(s);if(saveIt){persistToday();renderCalendar();renderEntries()}
 }
 tasks.forEach(function(t){t.addEventListener("click",function(){t.classList.toggle("done");updateScore(true)})});
 document.getElementById("resetToday").addEventListener("click",function(){tasks.forEach(function(t){t.classList.remove("done")});persistToday();updateScore(false);renderCalendar();renderEntries()});
 
 function scoreClass(s){if(s<=3)return"score-red";if(s<=5)return"score-orange";if(s<=7)return"score-yellow";if(s<=10)return"score-green";return"score-purple"}
+function paintScoreColor(s){var box=document.querySelector('.score');['score-red','score-orange','score-yellow','score-green','score-purple'].forEach(function(c){box.classList.remove(c)});box.classList.add(scoreClass(s));}
 function renderCalendar(){
  var c=document.getElementById("calendar");c.innerHTML="";["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(function(x){var e=document.createElement("div");e.className="dow";e.textContent=x;c.appendChild(e)});
  var y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0),off=(first.getDay()+6)%7;
@@ -239,19 +249,19 @@ function renderHabits(){
  var list=document.getElementById("habitList"),k=today();list.innerHTML="";if(!hdb.days[k])hdb.days[k]={};
  hdb.items.forEach(function(it,idx){
   var row=document.createElement("div");row.className="habitRow"+(hdb.days[k][it.id]?" done":"");row.style.setProperty("--hc",it.color||"#53a9f0");row.draggable=true;row.dataset.habitId=it.id;
-  var tog=document.createElement("button");tog.className="habitToggle";tog.textContent=hdb.days[k][it.id]?"✓":"";tog.onclick=function(){hdb.days[k][it.id]=!hdb.days[k][it.id];save();renderHabits()};
+  var tog=document.createElement("button");tog.className="habitToggle";tog.textContent=hdb.days[k][it.id]?"✓":"";tog.onclick=function(){hdb.days[k][it.id]=!hdb.days[k][it.id];save();renderHabits();renderEntries()};
   var nm=document.createElement("div");nm.className="habitName";nm.textContent=it.name;
   var ctl=document.createElement("div");ctl.className="habitControls";
-  var up=document.createElement("button");up.textContent="↑";up.disabled=idx===0;up.onclick=function(){if(idx>0){var x=hdb.items.splice(idx,1)[0];hdb.items.splice(idx-1,0,x);save();renderHabits()}};
-  var dn=document.createElement("button");dn.textContent="↓";dn.disabled=idx===hdb.items.length-1;dn.onclick=function(){if(idx<hdb.items.length-1){var x=hdb.items.splice(idx,1)[0];hdb.items.splice(idx+1,0,x);save();renderHabits()}};
-  var col=document.createElement("input");col.type="color";col.value=it.color||"#53a9f0";col.oninput=function(){it.color=col.value;save();renderHabits()};
-  var del=document.createElement("button");del.textContent="×";del.onclick=function(){hdb.items=hdb.items.filter(function(x){return x.id!==it.id});save();renderHabits()};
+  var up=document.createElement("button");up.textContent="↑";up.disabled=idx===0;up.onclick=function(){if(idx>0){var x=hdb.items.splice(idx,1)[0];hdb.items.splice(idx-1,0,x);save();renderHabits();renderEntries()}};
+  var dn=document.createElement("button");dn.textContent="↓";dn.disabled=idx===hdb.items.length-1;dn.onclick=function(){if(idx<hdb.items.length-1){var x=hdb.items.splice(idx,1)[0];hdb.items.splice(idx+1,0,x);save();renderHabits();renderEntries()}};
+  var col=document.createElement("input");col.type="color";col.value=it.color||"#53a9f0";col.oninput=function(){it.color=col.value;save();renderHabits();renderEntries()};
+  var del=document.createElement("button");del.textContent="×";del.onclick=function(){hdb.items=hdb.items.filter(function(x){return x.id!==it.id});save();renderHabits();renderEntries()};
   ctl.append(up,dn,col,del);row.append(tog,nm,ctl);list.appendChild(row);
   enableHabitDrag(row);
  });
  if(!hdb.items.length)list.innerHTML='<div class="detail">Noch keine zusätzlichen Habits.</div>';
 }
-document.getElementById("addHabit").onclick=function(){var i=document.getElementById("newHabitName"),n=i.value.trim();if(!n)return;hdb.items.push({id:"h"+Date.now(),name:n,color:"#53a9f0"});i.value="";save();renderHabits()};
+document.getElementById("addHabit").onclick=function(){var i=document.getElementById("newHabitName"),n=i.value.trim();if(!n)return;hdb.items.push({id:"h"+Date.now(),name:n,color:"#53a9f0"});i.value="";save();renderHabits();renderEntries()};
 document.getElementById("newHabitName").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("addHabit").click()});
 
 function pointsForTask(data,id,t){return (data.taskPoints&&data.taskPoints[id]!=null)?Number(data.taskPoints[id]):defaultPoints(t)}
@@ -268,18 +278,81 @@ function svgLine(values,maxY){
  var circles=pts.map(function(a){return'<circle cx="'+a.x+'" cy="'+a.y+'" r="4" fill="#c6ff00"/><text x="'+a.x+'" y="'+(a.y-8)+'" text-anchor="middle" class="axisText">'+a.v.value+'</text>'}).join("");
  return'<svg viewBox="0 0 '+w+' '+h+'" role="img">'+yLines+'<line x1="'+left+'" y1="'+(h-bottom)+'" x2="'+(w-right)+'" y2="'+(h-bottom)+'" stroke="#ffffff33"/><polyline points="'+poly+'" fill="none" stroke="#c6ff00" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'+circles+xLabels+'</svg>';
 }
+
+function svgBinaryLine(values){
+ if(!values.length)return'<div class="detail">Noch keine Daten.</div>';
+ var w=640,h=180,left=42,right=18,top=24,bottom=42;
+ var pts=values.map(function(v,i){
+   var x=values.length===1?(left+(w-right))/2:left+i*(w-left-right)/(values.length-1);
+   var y=v.value?top:(h-bottom);
+   return{x:x,y:y,v:v};
+ });
+ var poly=pts.map(function(a){return a.x+","+a.y}).join(" ");
+ var every=Math.max(1,Math.ceil(values.length/6)),xLabels="";
+ pts.forEach(function(a,i){
+   if(i%every===0||i===pts.length-1){
+     var dt=new Date(a.v.date+"T12:00:00");
+     xLabels+='<text x="'+a.x+'" y="'+(h-12)+'" text-anchor="middle" class="axisText">'+dt.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})+'</text>';
+   }
+ });
+ var circles=pts.map(function(a){return'<circle cx="'+a.x+'" cy="'+a.y+'" r="4" fill="#c6ff00"/>'}).join("");
+ return'<svg viewBox="0 0 '+w+' '+h+'" role="img"><line x1="'+left+'" y1="'+top+'" x2="'+(w-right)+'" y2="'+top+'" stroke="#ffffff18"/><line x1="'+left+'" y1="'+(h-bottom)+'" x2="'+(w-right)+'" y2="'+(h-bottom)+'" stroke="#ffffff33"/><text x="'+(left-7)+'" y="'+(top+3)+'" text-anchor="end" class="axisText">1</text><text x="'+(left-7)+'" y="'+(h-bottom+3)+'" text-anchor="end" class="axisText">0</text><polyline points="'+poly+'" fill="none" stroke="#c6ff00" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'+circles+xLabels+'</svg>';
+}
+
 function renderEntries(){
  var dates=sortedDates(),overall=dates.map(function(k){var d=dayData(k);return{date:k,value:Number(d.score)||0}});
  document.getElementById("overallChart").innerHTML=svgLine(overall,13);
  var list=document.getElementById("entryTasks");list.innerHTML="";
- tasks.forEach(function(t){var id=t.dataset.id,count=dates.filter(function(k){return dayData(k).done&&dayData(k).done[id]}).length,b=document.createElement("button");b.className="entryButton";b.innerHTML="<b>"+t.dataset.name+"</b><span>"+count+" erledigt</span>";b.onclick=function(){showTaskHistory(t)};list.appendChild(b)});
+ tasks.forEach(function(t){
+   var id=t.dataset.id,count=dates.filter(function(k){return dayData(k).done&&dayData(k).done[id]}).length;
+   var b=document.createElement("button");b.className="entryButton";b.innerHTML="<b>"+t.dataset.name+"</b><span>"+count+" gemacht</span>";
+   b.onclick=function(){showTaskHistory(t)};list.appendChild(b);
+ });
+ hdb.items.forEach(function(it){
+   var allHabitDates=Object.keys(hdb.days||{}).sort();
+   var count=allHabitDates.filter(function(k){return !!(hdb.days[k]&&hdb.days[k][it.id])}).length;
+   var b=document.createElement("button");b.className="entryButton";b.innerHTML="<b>"+it.name+"</b><span>"+count+" gemacht · Habit</span>";
+   b.onclick=function(){showHabitHistory(it)};list.appendChild(b);
+ });
 }
 function showTaskHistory(t){
- var id=t.dataset.id,dates=sortedDates(),rows=[],vals=[];
- dates.forEach(function(k){var d=dayData(k);if(d.done&&d.done[id]){var v=pointsForTask(d,id,t);rows.push({date:k,points:v});vals.push({date:k,value:v})}});
- var box=document.getElementById("taskEntryDetail");box.innerHTML="<h3>"+t.dataset.name+"</h3><div class='chartBox'>"+svgLine(vals,Math.max(defaultPoints(t),3))+"</div>";
- var l=document.createElement("div");l.className="historyList";rows.slice().reverse().forEach(function(r){var e=document.createElement("div");e.className="historyItem";e.innerHTML="<span>"+new Date(r.date+"T12:00:00").toLocaleDateString("de-DE")+"</span><b>"+r.points+" Punkte</b>";l.appendChild(e)});if(!rows.length)l.innerHTML='<div class="detail">Noch keine Einträge.</div>';box.appendChild(l);
+ var id=t.dataset.id,dates=sortedDates(),vals=[],rows=[];
+ dates.forEach(function(k){
+   var d=dayData(k),done=!!(d.done&&d.done[id]);
+   vals.push({date:k,value:done?1:0});
+   rows.push({date:k,done:done});
+ });
+ var box=document.getElementById("taskEntryDetail");
+ box.innerHTML="<h3>"+t.dataset.name+"</h3><div class='chartBox'>"+svgBinaryLine(vals)+"</div><p class='chartLabel'>1 = gemacht · 0 = nicht gemacht</p>";
+ var l=document.createElement("div");l.className="historyList";
+ rows.slice().reverse().forEach(function(r){
+   var e=document.createElement("div");e.className="historyItem";
+   e.innerHTML="<span>"+new Date(r.date+"T12:00:00").toLocaleDateString("de-DE")+"</span><b>"+(r.done?"✓ Gemacht":"– Nicht gemacht")+"</b>";
+   l.appendChild(e);
+ });
+ if(!rows.length)l.innerHTML='<div class="detail">Noch keine Einträge.</div>';
+ box.appendChild(l);
 }
+
+function showHabitHistory(it){
+ var dates=Object.keys(hdb.days||{}).sort(),vals=[],rows=[];
+ dates.forEach(function(k){
+   var done=!!(hdb.days[k]&&hdb.days[k][it.id]);
+   vals.push({date:k,value:done?1:0});
+   rows.push({date:k,done:done});
+ });
+ var box=document.getElementById("taskEntryDetail");
+ box.innerHTML="<h3>"+it.name+" <span style='font-size:11px;opacity:.65'>(Habit)</span></h3><div class='chartBox'>"+svgBinaryLine(vals)+"</div><p class='chartLabel'>1 = gemacht · 0 = nicht gemacht</p>";
+ var l=document.createElement("div");l.className="historyList";
+ rows.slice().reverse().forEach(function(r){
+   var e=document.createElement("div");e.className="historyItem";
+   e.innerHTML="<span>"+new Date(r.date+"T12:00:00").toLocaleDateString("de-DE")+"</span><b>"+(r.done?"✓ Gemacht":"– Nicht gemacht")+"</b>";
+   l.appendChild(e);
+ });
+ if(!rows.length)l.innerHTML='<div class="detail">Noch keine Einträge.</div>';
+ box.appendChild(l);
+}
+
 function download(name,text,type){var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},800)}
 document.getElementById("exportBackup").onclick=function(){download("Heute-Peppe-Backup-"+today()+".json",JSON.stringify({main:db,habits:hdb},null,2),"application/json")};
 document.getElementById("exportCsv").onclick=function(){var rows=[["Datum","Gesamtpunkte"].concat(tasks.map(function(t){return t.dataset.name}))];sortedDates().forEach(function(k){var d=dayData(k);rows.push([k,d.score||0].concat(tasks.map(function(t){return d.done&&d.done[t.dataset.id]?pointsForTask(d,t.dataset.id,t):0})))});download("Heute-Peppe-"+today()+".csv","\ufeff"+rows.map(function(r){return r.join(";")}).join("\n"),"text/csv;charset=utf-8")};
