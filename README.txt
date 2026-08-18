@@ -1,13 +1,9 @@
-Heute Peppe Cloud v6
+Heute Peppe Pro v5
 
 Neu:
-- Automatische verschlüsselte Cloud-Sicherung über Cloudflare Pages + D1.
-- Persönlicher Cloud-Code: ein Code genügt für Sicherung und Wiederherstellung.
-- Manuelles "Jetzt sichern" und "Aus Cloud wiederherstellen".
-- Automatische Sicherung nach lokalen Änderungen.
-- Bestehender JSON-/CSV-Export bleibt erhalten.
-- Bestehende Swipe-Habits und alle bisherigen Funktionen bleiben erhalten.
+- Habits per Swipe: nach rechts = erledigt, nach links = wieder offen.
+- Gedrückt halten und vertikal ziehen bleibt für die Reihenfolge erhalten.
+- Komplett-Backup verbessert: JSON enthält App-Kennung, Backup-Version, Erstellungszeit, alle Hauptaufgaben-/Kalenderdaten und alle Habit-Daten.
+- Backup kann auf einem anderen Gerät über Einstellungen > Backup importieren wiederhergestellt werden.
 
-Apple Health:
-Direkte HealthKit-Anbindung ist technisch nicht Teil dieser PWA-Version.
-Sie erfordert eine native iOS-App.
+Hinweis: Das Backup ist manuell. Automatische Cloud-Sicherung ist in dieser Version noch nicht enthalten.

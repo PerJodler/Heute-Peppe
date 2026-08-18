@@ -46,18 +46,6 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .entryList{display:grid;gap:7px}.entryButton{appearance:none;width:100%;background:#ffffff0a;color:#fff;border:1px solid #ffffff20;border-radius:12px;padding:11px;text-align:left;display:flex;justify-content:space-between;gap:8px}.entryButton b{font-size:14px}.entryButton span{font-size:12px;opacity:.7}
 .chartBox{background:#ffffff08;border-radius:14px;padding:9px;margin-top:8px}.chartBox svg{display:block;width:100%;height:auto}.chartLabel{font-size:11px;opacity:.7;margin-top:5px}.axisText{font-size:10px;fill:#dce8df}
 .historyList{display:grid;gap:5px;margin-top:8px}.historyItem{display:flex;justify-content:space-between;gap:10px;background:#ffffff08;border-radius:9px;padding:8px;font-size:12px}
-
-.cloudBox{margin-bottom:14px;background:#ffffff09;border:1px solid #ffffff20;border-radius:14px;padding:12px}
-.cloudBox h3{margin:0 0 8px;font-size:17px}
-.cloudGrid{display:grid;gap:8px}
-.cloudGrid input{width:100%;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:11px;padding:10px;font-size:14px}
-.cloudButtons{display:flex;flex-wrap:wrap;gap:7px}
-.cloudStatus{font-size:12px;line-height:1.4;margin-top:8px;opacity:.9}
-.cloudStatus.ok{color:#c6ff00}.cloudStatus.err{color:#ff9696}
-.cloudHint{font-size:11px;opacity:.68;line-height:1.35;margin-top:7px}
-.cloudSwitch{display:flex;align-items:center;gap:8px;font-size:13px}
-.cloudSwitch input{width:20px;height:20px}
-
 .settingsGrid{display:grid;gap:8px}.settingsGrid button{width:100%;text-align:left;background:#ffffff0a;color:#fff;border:1px solid #ffffff25;border-radius:12px;padding:12px;font-size:14px}
 .bottomNav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#07110d;border-top:1px solid #ffffff20;padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr)}
 .navBtn{appearance:none;background:transparent;border:0;color:#b9c6bd;padding:5px 2px;font-size:11px}.navBtn .ni{display:block;font-size:21px;line-height:1.1;margin-bottom:3px}.navBtn.active{color:#c6ff00}
@@ -125,23 +113,6 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <section id="settingsPage" class="page">
 <h1>EINSTELLUNGEN</h1>
 <section class="panel">
-<h2>Cloud-Backup</h2>
-<div class="cloudBox">
-<div class="cloudGrid">
-<label>Persönlicher Cloud-Code
-<input id="cloudCode" type="password" autocomplete="off" placeholder="Cloud-Code erstellen oder von anderem Gerät eingeben">
-</label>
-<label class="cloudSwitch"><input id="cloudAuto" type="checkbox" checked> Automatisch sichern</label>
-<div class="cloudButtons">
-<button id="cloudGenerate" class="control" type="button">Cloud-Code erstellen</button>
-<button id="cloudShow" class="control" type="button">Code anzeigen</button>
-<button id="cloudBackupNow" class="control" type="button">Jetzt sichern</button>
-<button id="cloudRestore" class="control" type="button">Aus Cloud wiederherstellen</button>
-</div>
-<div id="cloudStatus" class="cloudStatus">Cloud-Backup noch nicht eingerichtet.</div>
-<div class="cloudHint">Den Cloud-Code sicher aufbewahren. Auf einem neuen iPhone denselben Code eingeben und „Aus Cloud wiederherstellen“ wählen.</div>
-</div>
-</div>
 <h2>Daten</h2>
 <div class="settingsGrid">
 <button id="exportBackup">Backup als JSON exportieren</button>
@@ -165,9 +136,8 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <script>
 (function(){
 "use strict";
-var KEY="heute_peppe_pro_v4_main", HKEY="heute_peppe_pro_v4_habits", CKEY="heute_peppe_cloud_v1";
-var db={days:{}}, hdb={items:[],days:{}}, cloudCfg={code:"",auto:true,lastBackup:""};
-var cloudTimer=null, cloudBusy=false;
+var KEY="heute_peppe_pro_v4_main", HKEY="heute_peppe_pro_v4_habits";
+var db={days:{}}, hdb={items:[],days:{}};
 var tasks=[].slice.call(document.querySelectorAll(".mainTask"));
 var view=new Date();view=new Date(view.getFullYear(),view.getMonth(),1);
 
@@ -176,15 +146,9 @@ function today(){return dateKey(new Date())}
 function load(){
  try{var x=localStorage.getItem(KEY);if(x)db=JSON.parse(x)}catch(e){}
  try{var h=localStorage.getItem(HKEY);if(h)hdb=JSON.parse(h)}catch(e){}
- try{var c=localStorage.getItem(CKEY);if(c)cloudCfg=Object.assign(cloudCfg,JSON.parse(c))}catch(e){}
  if(!db.days)db.days={};if(!hdb.items)hdb.items=[];if(!hdb.days)hdb.days={};
 }
-function saveLocal(){
- localStorage.setItem(KEY,JSON.stringify(db));
- localStorage.setItem(HKEY,JSON.stringify(hdb));
- localStorage.setItem(CKEY,JSON.stringify(cloudCfg));
-}
-function save(){saveLocal();scheduleCloudBackup()}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));localStorage.setItem(HKEY,JSON.stringify(hdb))}
 function dayData(k){return db.days[k]||{done:{},taskPoints:{},score:0}}
 function defaultPoints(t){return Number(t.dataset.defaultPoints)||0}
 function scoreClass(s){if(s<=3)return"score-red";if(s<=5)return"score-orange";if(s<=7)return"score-yellow";if(s<=10)return"score-green";return"score-purple"}
@@ -331,101 +295,6 @@ function showHabitHistory(it){
  var l=document.createElement("div");l.className="historyList";rows.slice().reverse().forEach(function(r){var e=document.createElement("div");e.className="historyItem";e.innerHTML="<span>"+new Date(r.date+"T12:00:00").toLocaleDateString("de-DE")+"</span><b>"+(r.done?"✓ Gemacht":"– Nicht gemacht")+"</b>";l.appendChild(e)});box.appendChild(l);
 }
 
-
-function cloudStatus(text,type){
- var el=document.getElementById("cloudStatus");if(!el)return;
- el.textContent=text;el.className="cloudStatus"+(type?" "+type:"");
-}
-function bytesToB64u(bytes){
- var s="";for(var i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);
- return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-}
-function b64uToBytes(s){
- s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";
- var raw=atob(s),out=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out;
-}
-async function digestBytes(text){
- return new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(text)));
-}
-async function cloudIdentity(code){
- var id=await digestBytes("HeutePeppe|id|"+code),auth=await digestBytes("HeutePeppe|auth|"+code);
- return{syncId:Array.from(id.slice(0,16)).map(function(x){return x.toString(16).padStart(2,"0")}).join(""),
-        token:Array.from(auth).map(function(x){return x.toString(16).padStart(2,"0")}).join("")};
-}
-async function encryptionKey(code,salt){
- var base=await crypto.subtle.importKey("raw",new TextEncoder().encode(code),"PBKDF2",false,["deriveKey"]);
- return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:150000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
-}
-async function encryptBackup(obj,code){
- var salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),key=await encryptionKey(code,salt);
- var plain=new TextEncoder().encode(JSON.stringify(obj));
- var cipher=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv:iv},key,plain));
- return JSON.stringify({v:1,salt:bytesToB64u(salt),iv:bytesToB64u(iv),data:bytesToB64u(cipher)});
-}
-async function decryptBackup(payload,code){
- var p=JSON.parse(payload),salt=b64uToBytes(p.salt),iv=b64uToBytes(p.iv),data=b64uToBytes(p.data),key=await encryptionKey(code,salt);
- var plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:iv},key,data);
- return JSON.parse(new TextDecoder().decode(plain));
-}
-function completeBackup(){
- return{app:"Heute Peppe",backupVersion:3,createdAt:new Date().toISOString(),main:db,habits:hdb};
-}
-function scheduleCloudBackup(){
- if(!cloudCfg.auto||!cloudCfg.code)return;
- clearTimeout(cloudTimer);cloudTimer=setTimeout(function(){cloudBackup(false)},1400);
-}
-async function cloudBackup(manual){
- if(cloudBusy||!cloudCfg.code){if(manual)cloudStatus("Bitte zuerst einen Cloud-Code erstellen oder eingeben.","err");return}
- if(!window.crypto||!crypto.subtle){cloudStatus("Verschlüsselung wird von diesem Browser nicht unterstützt.","err");return}
- cloudBusy=true;if(manual)cloudStatus("Cloud-Backup wird erstellt …");
- try{
-   var ident=await cloudIdentity(cloudCfg.code),payload=await encryptBackup(completeBackup(),cloudCfg.code);
-   var res=await fetch("/api/cloud",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({syncId:ident.syncId,token:ident.token,payload:payload})});
-   var data=await res.json().catch(function(){return{}});
-   if(!res.ok)throw new Error(data.error||("HTTP "+res.status));
-   cloudCfg.lastBackup=data.updatedAt||new Date().toISOString();saveLocal();
-   cloudStatus("Gesichert: "+new Date(cloudCfg.lastBackup).toLocaleString("de-DE"),"ok");
- }catch(e){
-   cloudStatus("Cloud-Backup fehlgeschlagen: "+e.message,"err");
- }finally{cloudBusy=false}
-}
-async function cloudRestore(){
- var code=(document.getElementById("cloudCode").value||"").trim();
- if(!code){cloudStatus("Bitte den Cloud-Code eingeben.","err");return}
- cloudCfg.code=code;saveLocal();cloudStatus("Cloud-Backup wird geladen …");
- try{
-   var ident=await cloudIdentity(code);
-   var res=await fetch("/api/cloud?syncId="+encodeURIComponent(ident.syncId),{headers:{"X-Sync-Token":ident.token}});
-   var data=await res.json().catch(function(){return{}});
-   if(!res.ok)throw new Error(data.error||("HTTP "+res.status));
-   var backup=await decryptBackup(data.payload,code);
-   if(!backup||!backup.main||!backup.habits)throw new Error("Backup-Inhalt ungültig");
-   db=backup.main;hdb=backup.habits;if(!db.days)db.days={};if(!hdb.items)hdb.items=[];if(!hdb.days)hdb.days={};
-   cloudCfg.lastBackup=data.updatedAt||"";saveLocal();syncHome();renderCalendar();renderHabits();renderEntries();showDay(today());
-   cloudStatus("Cloud-Backup wiederhergestellt: "+new Date(data.updatedAt).toLocaleString("de-DE"),"ok");
- }catch(e){
-   cloudStatus("Wiederherstellung fehlgeschlagen: "+e.message,"err");
- }
-}
-function randomCloudCode(){
- var a=crypto.getRandomValues(new Uint8Array(18));return bytesToB64u(a);
-}
-function initCloudUI(){
- var input=document.getElementById("cloudCode"),auto=document.getElementById("cloudAuto");
- if(!input)return;
- input.value=cloudCfg.code||"";auto.checked=cloudCfg.auto!==false;
- if(cloudCfg.lastBackup)cloudStatus("Letztes Cloud-Backup: "+new Date(cloudCfg.lastBackup).toLocaleString("de-DE"),"ok");
- document.getElementById("cloudGenerate").onclick=function(){
-   cloudCfg.code=randomCloudCode();input.value=cloudCfg.code;cloudCfg.auto=true;auto.checked=true;saveLocal();
-   cloudStatus("Cloud-Code erstellt. Bitte sicher notieren; danach „Jetzt sichern“ wählen.","ok");
- };
- document.getElementById("cloudShow").onclick=function(){input.type=input.type==="password"?"text":"password";this.textContent=input.type==="password"?"Code anzeigen":"Code verbergen"};
- input.onchange=function(){cloudCfg.code=input.value.trim();saveLocal()};
- auto.onchange=function(){cloudCfg.auto=auto.checked;saveLocal();if(cloudCfg.auto)scheduleCloudBackup()};
- document.getElementById("cloudBackupNow").onclick=function(){cloudCfg.code=input.value.trim();saveLocal();cloudBackup(true)};
- document.getElementById("cloudRestore").onclick=cloudRestore;
-}
-
 function download(name,text,type){var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},800)}
 document.getElementById("exportBackup").onclick=function(){var backup={app:"Heute Peppe",backupVersion:2,createdAt:new Date().toISOString(),main:db,habits:hdb};download("Heute-Peppe-Komplett-Backup-"+today()+".json",JSON.stringify(backup,null,2),"application/json")};
 document.getElementById("exportCsv").onclick=function(){var rows=[["Datum","Gesamtpunkte"].concat(tasks.map(function(t){return t.dataset.name}))];sortedDates().forEach(function(k){var d=dayData(k);rows.push([k,d.score||0].concat(tasks.map(function(t){return d.done&&d.done[t.dataset.id]?1:0})))});download("Heute-Peppe-"+today()+".csv","\ufeff"+rows.map(function(r){return r.join(";")}).join("\n"),"text/csv;charset=utf-8")};
@@ -433,7 +302,7 @@ document.getElementById("importBackup").onclick=function(){document.getElementBy
 document.getElementById("importFile").onchange=async function(){var f=this.files[0];if(!f)return;try{var o=JSON.parse(await f.text());if(!o||!o.main||!o.habits)throw new Error("invalid");db=o.main;hdb=o.habits;if(!db.days)db.days={};if(!hdb.items)hdb.items=[];if(!hdb.days)hdb.days={};save();syncHome();renderCalendar();renderHabits();renderEntries();alert("Komplettes Backup importiert.")}catch(e){alert("Backup konnte nicht importiert werden. Bitte eine Heute-Peppe-JSON-Datei wählen.")}this.value=""};
 
 [].slice.call(document.querySelectorAll(".navBtn")).forEach(function(b){b.onclick=function(){document.querySelectorAll(".navBtn").forEach(function(x){x.classList.remove("active")});document.querySelectorAll(".page").forEach(function(x){x.classList.remove("active")});b.classList.add("active");document.getElementById(b.dataset.page).classList.add("active");if(b.dataset.page==="habitsPage")renderHabits();if(b.dataset.page==="entriesPage")renderEntries()}});
-load();syncHome();renderCalendar();showDay(today());renderHabits();renderEntries();initCloudUI();
+load();syncHome();renderCalendar();showDay(today());renderHabits();renderEntries();
 })();
 </script>
 </body>
