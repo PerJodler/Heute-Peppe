@@ -43,18 +43,26 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .day.score-purple{background:#8e44d8;color:#fff;border-color:#8e44d8}
 .day.today{box-shadow:inset 0 0 0 2px #fff}
 
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.tab{border:1px solid #ffffff35;background:#0b1711;color:#fff;border-radius:14px;padding:11px;font-weight:800}.tab.active{background:#fff;color:#0b1711}.page{display:none}.page.active{display:block}
+.legend{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px;padding:10px;background:#ffffff08;border-radius:12px;font-size:11px}.legendItem{display:flex;align-items:center;gap:5px}.swatch{width:15px;height:15px;border-radius:4px}
+.dayTasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}.dayTask{padding:7px;border-radius:9px;background:#ffffff0a;font-size:11px}.dayTask.yes{background:#43a04735}
+.habitForm{display:grid;grid-template-columns:1fr auto;gap:7px;margin:10px 0}.habitForm input{min-width:0;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:12px;padding:11px;font-size:15px}.habitList{display:grid;gap:8px}.habitRow{background:#08110d;border:2px solid #53a9f0;border-radius:16px;padding:11px;display:flex;align-items:center;gap:9px}.habitToggle{flex:1;border:0;background:transparent;color:#fff;text-align:left;font-weight:800;font-size:15px;padding:5px}.habitRow.done{background:#17301f;opacity:.75}.habitDelete{border:0;background:transparent;color:#fff;font-size:20px}.habitNote{font-size:12px;opacity:.75}
+
 @media(max-width:650px){
 h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.five .task{min-height:112px}.icon{font-size:27px}.name{font-size:14px}.meta,.pts{font-size:10px}.five .name{font-size:10.5px}.five .meta,.five .pts{font-size:9px}.five .icon{font-size:22px}.box{width:20px;height:20px}.calendar{gap:3px}.day{border-radius:8px}
 }
 </style>
 </head>
 <body><main>
+<nav class="tabs"><button id="tabToday" class="tab active" type="button">HEUTE</button><button id="tabHabits" class="tab" type="button">HABITS</button></nav>
+<div id="todayPage" class="page active">
 <section class="grid three">
 <button class="task" data-id="sport" data-points="3" data-name="Sport" style="--c:#ff5757"><span class="box"></span><div class="icon">🏋️</div><div class="name">Sport</div><div class="meta">45 min</div><div class="pts">3 Punkte</div></button>
 <button class="task" data-id="todo" data-points="2" data-name="To Do's" style="--c:#ff8a00"><span class="box"></span><div class="icon">☑️</div><div class="name">To Do's</div><div class="meta">je nach dem</div><div class="pts">2 Punkte</div></button>
 <button class="task" data-id="projekt" data-points="2" data-name="Projekt" style="--c:#45a9ff"><span class="box"></span><div class="icon">💻</div><div class="name">Projekt</div><div class="meta">120 min · je nach dem</div><div class="pts">2 Punkte</div></button>
 </section>
-<h1>HEUTE ♡</h1>
+<h1>HEUTE</h1>
 <section class="grid three">
 <button class="task" data-id="meditation" data-points="1" data-name="Meditation" style="--c:#9abd00"><span class="box"></span><div class="icon">🪷</div><div class="name">Meditation</div><div class="meta">10 min</div><div class="pts">1 Punkt</div></button>
 <button class="task" data-id="stretching" data-points="1" data-name="Stretching" style="--c:#ffd000"><span class="box"></span><div class="icon">🤸</div><div class="name">Stretching</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
@@ -77,10 +85,20 @@ h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.fi
 <div class="calHead"><h2>Kalender</h2><div class="nav"><button id="prev" class="control">‹</button><button id="now" class="control">Heute</button><button id="next" class="control">›</button></div></div>
 <div id="month" class="month"></div><div id="cal" class="calendar"></div>
 <div id="detail" class="detail">Tippe auf einen Tag.</div>
-<div class="stats"><div class="stat"><b id="avg">0</b><span>Ø Punkte</span></div><div class="stat"><b id="best">0</b><span>Bester Tag</span></div><div class="stat"><b id="active">0</b><span>Aktive Tage</span></div></div>
+<div class="stats"><div class="stat"><b id="avg">0</b><span>Ø Punkte</span></div><div class="stat"><b id="best">0</b><span>Bester Tag</span></div><div class="stat"><b id="active">0</b><span>Aktive Tage</span></div></div><div class="legend">
+<div class="legendItem"><span class="swatch" style="background:#e53935"></span>0–3 Rot</div>
+<div class="legendItem"><span class="swatch" style="background:#f57c00"></span>4–5 Orange</div>
+<div class="legendItem"><span class="swatch" style="background:#fbc02d"></span>6–7 Gelb</div>
+<div class="legendItem"><span class="swatch" style="background:#43a047"></span>8–10 Grün</div>
+<div class="legendItem"><span class="swatch" style="background:#8e44d8"></span>11–13 Lila</div></div>
 <div class="actions"><button id="backup" class="control">Backup exportieren</button><button id="csv" class="control">CSV exportieren</button></div>
 </section>
 <p class="note">Die Daten werden lokal auf diesem Gerät gespeichert.</p>
+</div>
+<div id="habitsPage" class="page"><section class="calendarBox"><div class="calHead"><h2>Zusätzliche Habits</h2></div>
+<p class="habitNote">Eigene tägliche Habits. Sie zählen nicht zu den 13 Hauptpunkten.</p>
+<div class="habitForm"><input id="habitName" maxlength="40" placeholder="Neues Habit"><button id="addHabit" class="control" type="button">Hinzufügen</button></div>
+<div id="habitList" class="habitList"></div></section></div>
 </main>
 <script>
 (function(){
@@ -151,7 +169,10 @@ function show(k){
  tasks.forEach(function(t){if(d.done&&d.done[t.getAttribute("data-id")])names.push(t.getAttribute("data-name"))});
  var dt=new Date(k+"T12:00:00");
  var isPast=k<today();
- detail.innerHTML="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b><br>"+(names.length?"Erledigt: "+names.join(", "):"Keine Aufgaben gespeichert.");
+ var taskHtml='<div class="dayTasks">';
+ tasks.forEach(function(t){var ok=!!(d.done&&d.done[t.getAttribute("data-id")]);taskHtml+='<div class="dayTask '+(ok?'yes':'')+'">'+(ok?'✓ ':'– ')+t.getAttribute("data-name")+'</div>';});
+ taskHtml+='</div>';
+ detail.innerHTML="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b>"+taskHtml;
  if(isPast){
    var wrap=document.createElement("div");wrap.className="editPast";
    var label=document.createElement("label");label.textContent="Punkte nachtragen:";
@@ -178,7 +199,17 @@ document.getElementById("csv").addEventListener("click",function(){
  var rows=[["Datum","Punkte"]];Object.keys(db.days).sort().forEach(function(k){rows.push([k,db.days[k].score||0])});
  var text=rows.map(function(r){return r.join(";")}).join("\n");dl("HEUTE-Kalender-"+today()+".csv","\ufeff"+text,"text/csv;charset=utf-8");
 });
-load();syncToday();render();show(today());
+
+var todayPage=document.getElementById("todayPage"),habitsPage=document.getElementById("habitsPage"),tabToday=document.getElementById("tabToday"),tabHabits=document.getElementById("tabHabits");
+function page(x){var a=x==="today";todayPage.classList.toggle("active",a);habitsPage.classList.toggle("active",!a);tabToday.classList.toggle("active",a);tabHabits.classList.toggle("active",!a)}
+tabToday.addEventListener("click",function(){page("today")});tabHabits.addEventListener("click",function(){page("habits");renderHabits()});
+var HK="heute_peppe_habits_v1",hd={items:[],days:{}};
+function hload(){try{var x=localStorage.getItem(HK);if(x)hd=JSON.parse(x)}catch(e){}if(!hd.items)hd.items=[];if(!hd.days)hd.days={}}
+function hsave(){localStorage.setItem(HK,JSON.stringify(hd))}
+function renderHabits(){var l=document.getElementById("habitList"),dk=today();l.innerHTML="";if(!hd.days[dk])hd.days[dk]={};hd.items.forEach(function(it){var r=document.createElement("div");r.className="habitRow"+(hd.days[dk][it.id]?" done":"");var b=document.createElement("button");b.type="button";b.className="habitToggle";b.textContent=(hd.days[dk][it.id]?"✓  ":"○  ")+it.name;b.addEventListener("click",function(){hd.days[dk][it.id]=!hd.days[dk][it.id];hsave();renderHabits()});var d=document.createElement("button");d.type="button";d.className="habitDelete";d.textContent="×";d.addEventListener("click",function(){hd.items=hd.items.filter(function(q){return q.id!==it.id});hsave();renderHabits()});r.appendChild(b);r.appendChild(d);l.appendChild(r)});if(!hd.items.length)l.innerHTML='<div class="detail">Noch keine zusätzlichen Habits.</div>'}
+document.getElementById("addHabit").addEventListener("click",function(){var i=document.getElementById("habitName"),n=i.value.trim();if(!n)return;hd.items.push({id:"h"+Date.now(),name:n});i.value="";hsave();renderHabits()});document.getElementById("habitName").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("addHabit").click()});hload();
+
+load();syncToday();render();show(today());renderHabits();
 })();
 </script>
 </body></html>
