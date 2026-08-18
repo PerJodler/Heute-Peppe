@@ -1,7 +1,7 @@
 Heute Peppe Pro v5
 
 Neu:
-- Neues grünes App-Logo mit kleinem, abgerundetem weißen H und langem diagonalen Schatten.
+- Neues grünes App-Logo mit schlankem, abgerundetem weißen H, langem diagonalen Schatten und weißen Außenecken.
 - Habits per Swipe: nach rechts = erledigt, nach links = wieder offen.
 - Gedrückt halten und vertikal ziehen bleibt für die Reihenfolge erhalten.
 - Komplett-Backup verbessert: JSON enthält App-Kennung, Backup-Version, Erstellungszeit, alle Hauptaufgaben-/Kalenderdaten und alle Habit-Daten.
