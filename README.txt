@@ -1,16 +1,20 @@
-Heute Peppe Pro v3
+Heute Peppe Pro v4
 
-Neu:
-- Home: Nachträglicher Aufgaben-Editor bleibt zweispaltig, alle Felder sind jetzt gleich hoch und kompakter.
-- Home: Der gesamte Punktebereich übernimmt die Tagesfarbe:
-  0–3 Rot, 4–5 Orange, 6–7 Gelb, 8–10 Grün, 11–13 Lila.
-- Einstellungen: Copyright © 2026 Peppe Mobilia. Alle Rechte vorbehalten.
-- Einträge: Zusätzliche Habits werden zusammen mit den Hauptaufgaben aufgelistet.
-- Einzelansicht jeder Hauptaufgabe und jedes Habits zeigt jetzt nach Datum nur:
-  1 = gemacht / 0 = nicht gemacht.
-- Darunter steht pro Datum zusätzlich „Gemacht“ oder „Nicht gemacht“.
-- Die große Verlaufskurve oben bleibt der Verlauf der Gesamtpunkte pro Tag.
+Home-Reihenfolge:
+1 Sport
+2 To Do's
+3 Projekt
+4 leer
+5 Meditation
+6 Stretching
+7 NEM & Eiweiß
+8 Buch lesen
+9 Spaziergang
+10 Weiterbildung
+11 Familie
+12 Freunde
 
-Installation:
-Dateien beim Hoster ersetzen und Safari neu laden. Falls nötig die Homescreen-App löschen
-und erneut über Safari → Teilen → Zum Home-Bildschirm hinzufügen.
+Beim nachträglichen Bearbeiten werden Meditation, Stretching, Spaziergang und Weiterbildung
+zweizeilig dargestellt, damit die Bezeichnungen nicht aus den kompakten Kästen ragen.
+
+Alle übrigen Funktionen aus v3 bleiben erhalten.

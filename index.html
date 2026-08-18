@@ -22,6 +22,11 @@ main{max-width:920px;margin:auto}
 h1{text-align:center;font-size:54px;font-style:italic;line-height:1;margin:14px 0 16px;font-weight:900;letter-spacing:-.04em}
 h2{margin:0 0 10px;font-size:22px}
 h3{margin:14px 0 8px;font-size:16px}
+
+.homeTaskGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.homeTaskGrid .task{min-height:132px}
+.taskSpacer{min-height:132px}
+
 .grid{display:grid;gap:8px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.five{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:8px}
 .task{
  appearance:none;-webkit-appearance:none;width:100%;position:relative;min-height:145px;border:3px solid var(--c);
@@ -70,7 +75,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .navBtn{appearance:none;background:transparent;border:0;color:#b9c6bd;padding:5px 2px;font-size:11px}.navBtn .ni{display:block;font-size:21px;line-height:1.1;margin-bottom:3px}.navBtn.active{color:#c6ff00}
 .note{font-size:12px;opacity:.75;line-height:1.4}
 @media(max-width:390px){.pastEditor{grid-template-columns:1fr}}
-@media(max-width:650px){
+@media(max-width:650px){.homeTaskGrid{gap:6px}.homeTaskGrid .task,.taskSpacer{min-height:116px}.homeTaskGrid .name{font-size:12px}.homeTaskGrid .meta,.homeTaskGrid .pts{font-size:9px}.homeTaskGrid .icon{font-size:24px}
  h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.five .task{min-height:112px}.icon{font-size:27px}.name{font-size:14px}.meta,.pts{font-size:10px}.five .name{font-size:10.5px}.five .meta,.five .pts{font-size:9px}.five .icon{font-size:22px}.box{width:20px;height:20px}.calendar{gap:3px}.day{border-radius:8px}
 }
 </style>
@@ -79,24 +84,23 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <main>
 
 <section id="homePage" class="page active">
-<section class="grid three">
+<section class="homeTaskGrid">
 <button class="task mainTask" data-id="sport" data-name="Sport" data-default-points="3" style="--c:#ff5757"><span class="box"></span><div class="icon">🏋️</div><div class="name">Sport</div><div class="meta">45 min</div><div class="pts">3 Punkte</div></button>
 <button class="task mainTask" data-id="todo" data-name="To Do's" data-default-points="2" style="--c:#ff8a00"><span class="box"></span><div class="icon">☑️</div><div class="name">To Do's</div><div class="meta">je nach dem</div><div class="pts">2 Punkte</div></button>
 <button class="task mainTask" data-id="projekt" data-name="Projekt" data-default-points="2" style="--c:#45a9ff"><span class="box"></span><div class="icon">💻</div><div class="name">Projekt</div><div class="meta">120 min · je nach dem</div><div class="pts">2 Punkte</div></button>
-</section>
-<h1>HEUTE</h1>
-<section class="grid three">
+<div class="taskSpacer" aria-hidden="true"></div>
+
 <button class="task mainTask" data-id="meditation" data-name="Meditation" data-default-points="1" style="--c:#9abd00"><span class="box"></span><div class="icon">🪷</div><div class="name">Meditation</div><div class="meta">10 min</div><div class="pts">1 Punkt</div></button>
 <button class="task mainTask" data-id="stretching" data-name="Stretching" data-default-points="1" style="--c:#ffd000"><span class="box"></span><div class="icon">🤸</div><div class="name">Stretching</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
 <button class="task mainTask" data-id="nem" data-name="NEM & Eiweiß" data-default-points="1" style="--c:#9d63df"><span class="box"></span><div class="icon">💊</div><div class="name">NEM &amp; Eiweiß</div><div class="meta">5 min</div><div class="pts">1 Punkt</div></button>
-</section>
-<section class="grid five">
 <button class="task mainTask" data-id="lesen" data-name="Buch lesen" data-default-points="1" style="--c:#16c7b4"><span class="box"></span><div class="icon">📖</div><div class="name">Buch lesen</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
+
 <button class="task mainTask" data-id="spaziergang" data-name="Spaziergang" data-default-points="1" style="--c:#8eb200"><span class="box"></span><div class="icon">🌳</div><div class="name">Spaziergang</div><div class="meta">20 min</div><div class="pts">1 Punkt</div></button>
 <button class="task mainTask" data-id="weiterbildung" data-name="Weiterbildung" data-default-points="1" style="--c:#53a9f0"><span class="box"></span><div class="icon">🎓</div><div class="name">Weiterbildung</div><div class="meta">30 min</div><div class="pts">1 Punkt</div></button>
 <button class="task mainTask" data-id="familie" data-name="Familie" data-default-points="0" style="--c:#ff3f7a"><span class="box"></span><div class="icon">👨‍👩‍👧</div><div class="name">Familie</div><div class="heart">♡</div></button>
 <button class="task mainTask" data-id="freunde" data-name="Freunde" data-default-points="0" style="--c:#ff6eae"><span class="box"></span><div class="icon">🫂</div><div class="name">Freunde</div><div class="heart">♡</div></button>
 </section>
+<h1>HEUTE</h1>
 <section class="score"><div class="scoreTop"><div><small>PUNKTE HEUTE</small><strong><span id="score">0</span> / 13</strong></div><button id="resetToday" class="control">Heute löschen</button></div><div class="track"><div id="fill" class="fill"></div></div></section>
 
 <section class="panel">
@@ -203,7 +207,12 @@ function showDay(k){
  var d=dayData(k),dt=new Date(k+"T12:00:00"),box=document.getElementById("dayDetail");
  var html="<b>"+dt.toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+"</b><br>Punkte: <b>"+(d.score||0)+" / 13</b>";
  html+='<div class="pastEditor">';
- tasks.forEach(function(t){var id=t.dataset.id,done=!!(d.done&&d.done[id]),p=(d.taskPoints&&d.taskPoints[id]!=null)?d.taskPoints[id]:defaultPoints(t);html+='<div class="editRow"><label><input class="pastDone" type="checkbox" data-id="'+id+'" '+(done?"checked":"")+'> '+t.dataset.name+'</label><input class="pastPoints" data-id="'+id+'" type="number" min="0" max="13" step="1" value="'+p+'"><span>P</span></div>'});
+ tasks.forEach(function(t){var id=t.dataset.id,done=!!(d.done&&d.done[id]),p=(d.taskPoints&&d.taskPoints[id]!=null)?d.taskPoints[id]:defaultPoints(t);var editName=t.dataset.name;
+ if(id==="meditation")editName="Medi-<br>tation";
+ if(id==="stretching")editName="Stret-<br>ching";
+ if(id==="spaziergang")editName="Spazier-<br>gang";
+ if(id==="weiterbildung")editName="Weiter-<br>bildung";
+ html+='<div class="editRow"><label><input class="pastDone" type="checkbox" data-id="'+id+'" '+(done?"checked":"")+'> <span>'+editName+'</span></label><input class="pastPoints" data-id="'+id+'" type="number" min="0" max="13" step="1" value="'+p+'"><span>P</span></div>'});
  html+='</div><button id="savePast" class="control" type="button">Tag speichern</button>';
  box.innerHTML=html;
  document.getElementById("savePast").addEventListener("click",function(){
