@@ -1,0 +1,44 @@
+HEUTE PEPPE – CLOUDFLARE CLOUD-BACKUP
+
+Diese Version braucht Cloudflare Pages + eine D1-Datenbank.
+Plain GitHub Pages reicht für das Cloud-Backup nicht aus.
+
+DATEIEN HOCHLADEN
+- index.html
+- manifest.json
+- _worker.js
+- schema.sql (nur Dokumentation; die Tabelle wird automatisch angelegt)
+
+EINMALIGE CLOUDFLARE-EINRICHTUNG
+1. In Cloudflare: Workers & Pages öffnen.
+2. Dein Pages-Projekt öffnen bzw. die Dateien als Pages-Projekt hochladen.
+3. In Cloudflare eine D1-Datenbank erstellen, z. B. "heute-peppe".
+4. Im Pages-Projekt: Settings > Bindings > Add > D1 database.
+5. Variable name exakt: DB
+6. Deine D1-Datenbank auswählen.
+7. Projekt erneut deployen / die ZIP erneut hochladen, damit das Binding aktiv ist.
+
+WICHTIG:
+- Diese ZIP verwendet _worker.js (Pages Advanced Mode), damit die API zusammen
+  mit den statischen Dateien bereitgestellt wird.
+- Wenn Cloudflare beim Cloud-Backup "D1-Binding DB fehlt" meldet, Schritt 4–7 prüfen.
+
+IN DER APP
+1. Einstellungen > Cloud-Backup.
+2. "Cloud-Code erstellen".
+3. Den Code sicher außerhalb der App notieren.
+4. "Jetzt sichern".
+5. "Automatisch sichern" eingeschaltet lassen.
+6. Auf einem neuen iPhone dieselbe App öffnen, denselben Cloud-Code eingeben und
+   "Aus Cloud wiederherstellen" wählen.
+
+SICHERHEIT
+- Die App verschlüsselt das Backup im Browser vor dem Hochladen (AES-GCM).
+- Der Cloud-Code wird nicht als Klartext in D1 gespeichert.
+- Ohne Cloud-Code kann das Backup nicht durch die App entschlüsselt werden.
+- Verlierst du den Cloud-Code, kann das Cloud-Backup nicht wiederhergestellt werden.
+
+APPLE HEALTH
+Direkter Apple-Health-/HealthKit-Zugriff ist in dieser Web-App/PWA nicht enthalten.
+HealthKit benötigt eine native iOS-App mit HealthKit-Capability, Xcode-Konfiguration
+und ausdrücklicher Nutzerfreigabe.
