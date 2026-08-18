@@ -42,7 +42,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .editRow label{font-size:11px;line-height:1.05;display:flex;align-items:center;gap:4px;min-width:0}.editRow input[type=checkbox]{width:18px;height:18px;flex:0 0 auto}.editRow input[type=number]{width:46px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:7px;padding:5px;font-size:12px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.stat{text-align:center;background:#ffffff0a;border-radius:11px;padding:8px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;opacity:.7}
 .habitForm{display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:14px}.habitForm input[type=text]{min-width:0;background:#ffffff0a;color:white;border:1px solid #ffffff35;border-radius:12px;padding:11px;font-size:15px}
-.habitList{display:grid;gap:8px}.habitRow{background:#08110d;border:2px solid var(--hc);border-radius:16px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;touch-action:none}.habitRow.dragging{opacity:.45}.habitToggle{width:28px;height:28px;border:2px solid var(--hc);border-radius:6px;background:transparent;color:white;font-weight:900}.habitRow.done{background:#17301f}.habitName{font-weight:800}.habitControls{display:flex;align-items:center;gap:5px}.habitControls button{background:#ffffff0b;color:white;border:1px solid #ffffff25;border-radius:8px;padding:5px 7px}.habitControls input[type=color]{width:30px;height:30px;border:0;background:none;padding:0}
+.habitList{display:grid;gap:8px}.habitRow{position:relative;background:#08110d;transition:transform .16s ease,background .16s ease;}.habitRow.swipeGood{transform:translateX(18px);background:#245c34}.habitRow.swipeUndo{transform:translateX(-18px);background:#5b2929}.habitRow{background:#08110d;border:2px solid var(--hc);border-radius:16px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;touch-action:none}.habitRow.dragging{opacity:.45}.habitToggle{width:28px;height:28px;border:2px solid var(--hc);border-radius:6px;background:transparent;color:white;font-weight:900}.habitRow.done{background:#17301f}.habitName{font-weight:800}.habitControls{display:flex;align-items:center;gap:5px}.habitControls button{background:#ffffff0b;color:white;border:1px solid #ffffff25;border-radius:8px;padding:5px 7px}.habitControls input[type=color]{width:30px;height:30px;border:0;background:none;padding:0}
 .entryList{display:grid;gap:7px}.entryButton{appearance:none;width:100%;background:#ffffff0a;color:#fff;border:1px solid #ffffff20;border-radius:12px;padding:11px;text-align:left;display:flex;justify-content:space-between;gap:8px}.entryButton b{font-size:14px}.entryButton span{font-size:12px;opacity:.7}
 .chartBox{background:#ffffff08;border-radius:14px;padding:9px;margin-top:8px}.chartBox svg{display:block;width:100%;height:auto}.chartLabel{font-size:11px;opacity:.7;margin-top:5px}.axisText{font-size:10px;fill:#dce8df}
 .historyList{display:grid;gap:5px;margin-top:8px}.historyItem{display:flex;justify-content:space-between;gap:10px;background:#ffffff08;border-radius:9px;padding:8px;font-size:12px}
@@ -225,10 +225,22 @@ function enableDrag(row){
  row.ondragend=function(){dragged=null;row.classList.remove("dragging")};
  row.ondragover=function(e){e.preventDefault()};
  row.ondrop=function(e){e.preventDefault();reorder(dragged,row.dataset.id)};
- var timer=null,moving=false;
- row.addEventListener("touchstart",function(e){if(e.target.closest("button")||e.target.closest("input"))return;timer=setTimeout(function(){moving=true;dragged=row.dataset.id;row.classList.add("dragging")},220)},{passive:true});
- row.addEventListener("touchmove",function(e){if(!moving)return;e.preventDefault();var el=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY),target=el&&el.closest(".habitRow");if(target&&target!==row)reorder(dragged,target.dataset.id)},{passive:false});
- row.addEventListener("touchend",function(){clearTimeout(timer);moving=false;dragged=null;row.classList.remove("dragging")});
+ var timer=null,moving=false,swiping=false,startX=0,startY=0,lastX=0;
+ row.addEventListener("touchstart",function(e){
+   if(e.target.closest("button")||e.target.closest("input"))return;
+   startX=lastX=e.touches[0].clientX;startY=e.touches[0].clientY;swiping=false;
+   timer=setTimeout(function(){if(!swiping){moving=true;dragged=row.dataset.id;row.classList.add("dragging")}},380);
+ },{passive:true});
+ row.addEventListener("touchmove",function(e){
+   var x=e.touches[0].clientX,y=e.touches[0].clientY,dx=x-startX,dy=y-startY;lastX=x;
+   if(!moving && Math.abs(dx)>18 && Math.abs(dx)>Math.abs(dy)*1.25){swiping=true;clearTimeout(timer);e.preventDefault();row.classList.toggle("swipeGood",dx>0);row.classList.toggle("swipeUndo",dx<0);return}
+   if(moving){e.preventDefault();var el=document.elementFromPoint(x,y),target=el&&el.closest(".habitRow");if(target&&target!==row)reorder(dragged,target.dataset.id)}
+ },{passive:false});
+ row.addEventListener("touchend",function(){
+   clearTimeout(timer);
+   if(swiping){var dx=lastX-startX,k=today();if(!hdb.days[k])hdb.days[k]={};if(dx>55)hdb.days[k][row.dataset.id]=true;else if(dx<-55)hdb.days[k][row.dataset.id]=false;save();renderHabits();renderEntries()}
+   moving=false;swiping=false;dragged=null;row.classList.remove("dragging","swipeGood","swipeUndo");
+ });
 }
 function renderHabits(){
  var list=document.getElementById("habitList"),k=today();list.innerHTML="";if(!hdb.days[k])hdb.days[k]={};
@@ -284,10 +296,10 @@ function showHabitHistory(it){
 }
 
 function download(name,text,type){var blob=new Blob([text],{type:type}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},800)}
-document.getElementById("exportBackup").onclick=function(){download("Heute-Peppe-Backup-"+today()+".json",JSON.stringify({main:db,habits:hdb},null,2),"application/json")};
+document.getElementById("exportBackup").onclick=function(){var backup={app:"Heute Peppe",backupVersion:2,createdAt:new Date().toISOString(),main:db,habits:hdb};download("Heute-Peppe-Komplett-Backup-"+today()+".json",JSON.stringify(backup,null,2),"application/json")};
 document.getElementById("exportCsv").onclick=function(){var rows=[["Datum","Gesamtpunkte"].concat(tasks.map(function(t){return t.dataset.name}))];sortedDates().forEach(function(k){var d=dayData(k);rows.push([k,d.score||0].concat(tasks.map(function(t){return d.done&&d.done[t.dataset.id]?1:0})))});download("Heute-Peppe-"+today()+".csv","\ufeff"+rows.map(function(r){return r.join(";")}).join("\n"),"text/csv;charset=utf-8")};
 document.getElementById("importBackup").onclick=function(){document.getElementById("importFile").click()};
-document.getElementById("importFile").onchange=async function(){var f=this.files[0];if(!f)return;try{var o=JSON.parse(await f.text());if(o.main)db=o.main;if(o.habits)hdb=o.habits;save();syncHome();renderCalendar();renderHabits();renderEntries();alert("Backup importiert.")}catch(e){alert("Backup konnte nicht importiert werden.")}this.value=""};
+document.getElementById("importFile").onchange=async function(){var f=this.files[0];if(!f)return;try{var o=JSON.parse(await f.text());if(!o||!o.main||!o.habits)throw new Error("invalid");db=o.main;hdb=o.habits;if(!db.days)db.days={};if(!hdb.items)hdb.items=[];if(!hdb.days)hdb.days={};save();syncHome();renderCalendar();renderHabits();renderEntries();alert("Komplettes Backup importiert.")}catch(e){alert("Backup konnte nicht importiert werden. Bitte eine Heute-Peppe-JSON-Datei wählen.")}this.value=""};
 
 [].slice.call(document.querySelectorAll(".navBtn")).forEach(function(b){b.onclick=function(){document.querySelectorAll(".navBtn").forEach(function(x){x.classList.remove("active")});document.querySelectorAll(".page").forEach(function(x){x.classList.remove("active")});b.classList.add("active");document.getElementById(b.dataset.page).classList.add("active");if(b.dataset.page==="habitsPage")renderHabits();if(b.dataset.page==="entriesPage")renderEntries()}});
 load();syncHome();renderCalendar();showDay(today());renderHabits();renderEntries();

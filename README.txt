@@ -1,22 +1,9 @@
-Heute Peppe Pro v4
+Heute Peppe Pro v5
 
-Neu auf Home beim nachträglichen Bearbeiten:
-- 2 Spalten, kompakt und gleich groß.
-- Reihenfolge:
-  Sport | To Do's
-  Projekt | leer
-  Meditation | Stretching
-  NEM & Eiweiß | Buch lesen
-  Spaziergang | Weiterbildung
-  Familie | Freunde
-- Zweizeilige Kurztrennung:
-  Medi-/tation, Stret-/ching, Spazier-/gang, Weiter-/bildung.
+Neu:
+- Habits per Swipe: nach rechts = erledigt, nach links = wieder offen.
+- Gedrückt halten und vertikal ziehen bleibt für die Reihenfolge erhalten.
+- Komplett-Backup verbessert: JSON enthält App-Kennung, Backup-Version, Erstellungszeit, alle Hauptaufgaben-/Kalenderdaten und alle Habit-Daten.
+- Backup kann auf einem anderen Gerät über Einstellungen > Backup importieren wiederhergestellt werden.
 
-Enthalten bleiben:
-- farbige Gesamtpunkte und Kalender
-- vergangene Tage je Aufgabe und Punktwert editierbar
-- Habits mit Farbe, Sortierung und Finger-Verschieben
-- Einträge mit Gesamtpunkte-Kurve
-- Aufgaben/Habits mit 1/0-Verlauf
-- Export/Import unter Einstellungen
-- Copyright-Hinweis
+Hinweis: Das Backup ist manuell. Automatische Cloud-Sicherung ist in dieser Version noch nicht enthalten.
