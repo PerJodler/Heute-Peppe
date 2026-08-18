@@ -1,20 +1,22 @@
 Heute Peppe Pro v4
 
-Home-Reihenfolge:
-1 Sport
-2 To Do's
-3 Projekt
-4 leer
-5 Meditation
-6 Stretching
-7 NEM & Eiweiß
-8 Buch lesen
-9 Spaziergang
-10 Weiterbildung
-11 Familie
-12 Freunde
+Neu auf Home beim nachträglichen Bearbeiten:
+- 2 Spalten, kompakt und gleich groß.
+- Reihenfolge:
+  Sport | To Do's
+  Projekt | leer
+  Meditation | Stretching
+  NEM & Eiweiß | Buch lesen
+  Spaziergang | Weiterbildung
+  Familie | Freunde
+- Zweizeilige Kurztrennung:
+  Medi-/tation, Stret-/ching, Spazier-/gang, Weiter-/bildung.
 
-Beim nachträglichen Bearbeiten werden Meditation, Stretching, Spaziergang und Weiterbildung
-zweizeilig dargestellt, damit die Bezeichnungen nicht aus den kompakten Kästen ragen.
-
-Alle übrigen Funktionen aus v3 bleiben erhalten.
+Enthalten bleiben:
+- farbige Gesamtpunkte und Kalender
+- vergangene Tage je Aufgabe und Punktwert editierbar
+- Habits mit Farbe, Sortierung und Finger-Verschieben
+- Einträge mit Gesamtpunkte-Kurve
+- Aufgaben/Habits mit 1/0-Verlauf
+- Export/Import unter Einstellungen
+- Copyright-Hinweis
