@@ -41,10 +41,16 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 .month{text-align:center;font-weight:800;margin:12px 0}.nav{display:flex;gap:5px}
 .detail{margin-top:10px;background:#ffffff0b;border-radius:12px;padding:10px;font-size:13px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px;padding:10px;background:#ffffff08;border-radius:12px;font-size:11px}.legendItem{display:flex;align-items:center;gap:5px}.swatch{width:15px;height:15px;border-radius:4px}
-.pastEditor{display:grid;gap:7px;margin-top:10px}.editRow{display:grid;grid-template-columns:1fr 62px 26px;gap:7px;align-items:center;background:#ffffff08;border-radius:10px;padding:7px}.editRow input[type=number]{width:62px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:8px;padding:7px}.editRow input[type=checkbox]{width:22px;height:22px}
+.pastEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.editRow{display:grid;grid-template-columns:1fr 62px 26px;gap:7px;align-items:center;background:#ffffff08;border-radius:10px;padding:7px}.editRow input[type=number]{width:62px;background:#ffffff0a;color:#fff;border:1px solid #ffffff35;border-radius:8px;padding:7px}.editRow input[type=checkbox]{width:22px;height:22px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.stat{text-align:center;background:#ffffff0a;border-radius:11px;padding:8px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;opacity:.7}
 .habitForm{display:grid;grid-template-columns:1fr auto;gap:7px}.habitForm input[type=text]{min-width:0;background:#ffffff0a;color:white;border:1px solid #ffffff35;border-radius:12px;padding:11px;font-size:15px}
 .habitList{display:grid;gap:8px;margin-top:10px}.habitRow{background:#08110d;border:2px solid var(--hc);border-radius:16px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}.habitToggle{width:28px;height:28px;border:2px solid var(--hc);border-radius:6px;background:transparent;color:white;font-weight:900}.habitRow.done{background:#17301f}.habitName{font-weight:800}.habitControls{display:flex;align-items:center;gap:5px}.habitControls button{background:#ffffff0b;color:white;border:1px solid #ffffff25;border-radius:8px;padding:5px 7px}.habitControls input[type=color]{width:30px;height:30px;border:0;background:none;padding:0}
+
+.habitRow{touch-action:none}
+.habitRow.dragging{opacity:.45;transform:scale(.98)}
+.dragHandle{font-size:20px;opacity:.65;cursor:grab;user-select:none;padding:2px 4px}
+.axisText{font-size:10px;fill:#dce8df}
+
 .entryList{display:grid;gap:7px}.entryButton{appearance:none;width:100%;background:#ffffff0a;color:#fff;border:1px solid #ffffff20;border-radius:12px;padding:11px;text-align:left;display:flex;justify-content:space-between;gap:8px}.entryButton b{font-size:14px}.entryButton span{font-size:12px;opacity:.7}
 .chartBox{background:#ffffff08;border-radius:14px;padding:9px;margin-top:8px}.chartBox svg{display:block;width:100%;height:auto}.chartLabel{font-size:11px;opacity:.7;margin-top:5px}
 .historyList{display:grid;gap:5px;margin-top:8px}.historyItem{display:flex;justify-content:space-between;gap:10px;background:#ffffff08;border-radius:9px;padding:8px;font-size:12px}
@@ -55,6 +61,7 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 }
 .navBtn{appearance:none;background:transparent;border:0;color:#b9c6bd;padding:5px 2px;font-size:11px}.navBtn .ni{display:block;font-size:21px;line-height:1.1;margin-bottom:3px}.navBtn.active{color:#c6ff00}
 .note{font-size:12px;opacity:.75;line-height:1.4}
+@media(max-width:390px){.pastEditor{grid-template-columns:1fr}}
 @media(max-width:650px){
  h1{font-size:47px}.task{min-height:124px;border-width:2px;border-radius:15px}.five .task{min-height:112px}.icon{font-size:27px}.name{font-size:14px}.meta,.pts{font-size:10px}.five .name{font-size:10.5px}.five .meta,.five .pts{font-size:9px}.five .icon{font-size:22px}.box{width:20px;height:20px}.calendar{gap:3px}.day{border-radius:8px}
 }
@@ -96,18 +103,17 @@ button.control{background:#ffffff10;color:white;border:1px solid #ffffff35;borde
 <section id="habitsPage" class="page">
 <h1>HABITS</h1>
 <section class="panel">
-<p class="note">Eigene tägliche Habits. Farbe und Reihenfolge kannst du jederzeit ändern. Diese Habits zählen nicht zu den 13 Hauptpunkten.</p>
-<div class="habitForm"><input id="newHabitName" type="text" maxlength="40" placeholder="Neues Habit"><button id="addHabit" class="control">Hinzufügen</button></div>
 <div id="habitList" class="habitList"></div>
+<div class="habitForm" style="margin-top:14px"><input id="newHabitName" type="text" maxlength="40" placeholder="Neues Habit"><button id="addHabit" class="control">Hinzufügen</button></div>
 </section>
 </section>
 
 <section id="entriesPage" class="page">
 <h1>EINTRÄGE</h1>
 <section class="panel">
-<h2>Verlauf erledigter Aufgaben</h2>
+<h2>Verlauf der Gesamtpunkte</h2>
 <div id="overallChart" class="chartBox"></div>
-<p class="chartLabel">Anzahl erledigter Hauptaufgaben pro gespeichertem Tag.</p>
+<p class="chartLabel">Gesamtpunkte pro gespeichertem Tag. Datum und Punktwert werden direkt an der Kurve angezeigt.</p>
 <h3>Aufgaben</h3>
 <div id="entryTasks" class="entryList"></div>
 <div id="taskEntryDetail"></div>
@@ -201,10 +207,38 @@ document.getElementById("prevMonth").onclick=function(){view=new Date(view.getFu
 document.getElementById("nextMonth").onclick=function(){view=new Date(view.getFullYear(),view.getMonth()+1,1);renderCalendar()};
 document.getElementById("todayMonth").onclick=function(){var d=new Date();view=new Date(d.getFullYear(),d.getMonth(),1);renderCalendar();showDay(today())};
 
+
+var draggedHabitId=null;
+function reorderHabit(fromId,toId){
+ if(!fromId||!toId||fromId===toId)return;
+ var from=hdb.items.findIndex(function(x){return x.id===fromId}),to=hdb.items.findIndex(function(x){return x.id===toId});
+ if(from<0||to<0)return;var item=hdb.items.splice(from,1)[0];hdb.items.splice(to,0,item);save();renderHabits();
+}
+function enableHabitDrag(row){
+ row.addEventListener("dragstart",function(e){draggedHabitId=row.dataset.habitId;row.classList.add("dragging");if(e.dataTransfer)e.dataTransfer.effectAllowed="move"});
+ row.addEventListener("dragend",function(){row.classList.remove("dragging");draggedHabitId=null});
+ row.addEventListener("dragover",function(e){e.preventDefault()});
+ row.addEventListener("drop",function(e){e.preventDefault();reorderHabit(draggedHabitId,row.dataset.habitId)});
+ var pressTimer=null,startY=0,moving=false;
+ row.addEventListener("touchstart",function(e){
+   if(e.target.closest("button")||e.target.closest("input"))return;
+   startY=e.touches[0].clientY;
+   pressTimer=setTimeout(function(){moving=true;draggedHabitId=row.dataset.habitId;row.classList.add("dragging")},220);
+ },{passive:true});
+ row.addEventListener("touchmove",function(e){
+   if(!moving){if(Math.abs(e.touches[0].clientY-startY)>8){clearTimeout(pressTimer)}return}
+   e.preventDefault();
+   var el=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
+   var target=el&&el.closest(".habitRow");
+   if(target&&target!==row)reorderHabit(draggedHabitId,target.dataset.habitId);
+ },{passive:false});
+ row.addEventListener("touchend",function(){clearTimeout(pressTimer);moving=false;row.classList.remove("dragging");draggedHabitId=null});
+}
+
 function renderHabits(){
  var list=document.getElementById("habitList"),k=today();list.innerHTML="";if(!hdb.days[k])hdb.days[k]={};
  hdb.items.forEach(function(it,idx){
-  var row=document.createElement("div");row.className="habitRow"+(hdb.days[k][it.id]?" done":"");row.style.setProperty("--hc",it.color||"#53a9f0");
+  var row=document.createElement("div");row.className="habitRow"+(hdb.days[k][it.id]?" done":"");row.style.setProperty("--hc",it.color||"#53a9f0");row.draggable=true;row.dataset.habitId=it.id;
   var tog=document.createElement("button");tog.className="habitToggle";tog.textContent=hdb.days[k][it.id]?"✓":"";tog.onclick=function(){hdb.days[k][it.id]=!hdb.days[k][it.id];save();renderHabits()};
   var nm=document.createElement("div");nm.className="habitName";nm.textContent=it.name;
   var ctl=document.createElement("div");ctl.className="habitControls";
@@ -213,6 +247,7 @@ function renderHabits(){
   var col=document.createElement("input");col.type="color";col.value=it.color||"#53a9f0";col.oninput=function(){it.color=col.value;save();renderHabits()};
   var del=document.createElement("button");del.textContent="×";del.onclick=function(){hdb.items=hdb.items.filter(function(x){return x.id!==it.id});save();renderHabits()};
   ctl.append(up,dn,col,del);row.append(tog,nm,ctl);list.appendChild(row);
+  enableHabitDrag(row);
  });
  if(!hdb.items.length)list.innerHTML='<div class="detail">Noch keine zusätzlichen Habits.</div>';
 }
@@ -223,14 +258,19 @@ function pointsForTask(data,id,t){return (data.taskPoints&&data.taskPoints[id]!=
 function sortedDates(){return Object.keys(db.days).sort()}
 function svgLine(values,maxY){
  if(!values.length)return'<div class="detail">Noch keine Daten.</div>';
- var w=600,h=180,p=24,max=Math.max(maxY||1,1),pts=values.map(function(v,i){var x=values.length===1?w/2:p+i*(w-2*p)/(values.length-1),y=h-p-(Math.max(0,v.value)/max)*(h-2*p);return{x:x,y:y}});
+ var w=640,h=220,left=42,right=18,top=18,bottom=42,max=Math.max(maxY||1,1);
+ var pts=values.map(function(v,i){var x=values.length===1?(left+(w-right))/2:left+i*(w-left-right)/(values.length-1),y=h-bottom-(Math.max(0,v.value)/max)*(h-top-bottom);return{x:x,y:y,v:v}});
  var poly=pts.map(function(a){return a.x+","+a.y}).join(" ");
- var circles=pts.map(function(a){return'<circle cx="'+a.x+'" cy="'+a.y+'" r="4" fill="#c6ff00"/>'}).join("");
- return'<svg viewBox="0 0 '+w+' '+h+'" role="img"><line x1="'+p+'" y1="'+(h-p)+'" x2="'+(w-p)+'" y2="'+(h-p)+'" stroke="#ffffff33"/><polyline points="'+poly+'" fill="none" stroke="#c6ff00" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'+circles+'</svg>';
+ var yLines="";
+ for(var q=0;q<=max;q++){if(max>8 && q%2!==0)continue;var yy=h-bottom-(q/max)*(h-top-bottom);yLines+='<line x1="'+left+'" y1="'+yy+'" x2="'+(w-right)+'" y2="'+yy+'" stroke="#ffffff12"/><text x="'+(left-7)+'" y="'+(yy+3)+'" text-anchor="end" class="axisText">'+q+'</text>'}
+ var every=Math.max(1,Math.ceil(values.length/6)),xLabels="";
+ pts.forEach(function(a,i){if(i%every===0||i===pts.length-1){var dt=new Date(a.v.date+"T12:00:00");xLabels+='<text x="'+a.x+'" y="'+(h-12)+'" text-anchor="middle" class="axisText">'+dt.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})+'</text>'}});
+ var circles=pts.map(function(a){return'<circle cx="'+a.x+'" cy="'+a.y+'" r="4" fill="#c6ff00"/><text x="'+a.x+'" y="'+(a.y-8)+'" text-anchor="middle" class="axisText">'+a.v.value+'</text>'}).join("");
+ return'<svg viewBox="0 0 '+w+' '+h+'" role="img">'+yLines+'<line x1="'+left+'" y1="'+(h-bottom)+'" x2="'+(w-right)+'" y2="'+(h-bottom)+'" stroke="#ffffff33"/><polyline points="'+poly+'" fill="none" stroke="#c6ff00" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>'+circles+xLabels+'</svg>';
 }
 function renderEntries(){
- var dates=sortedDates(),overall=dates.map(function(k){var d=dayData(k),count=tasks.filter(function(t){return d.done&&d.done[t.dataset.id]}).length;return{date:k,value:count}});
- document.getElementById("overallChart").innerHTML=svgLine(overall,tasks.length);
+ var dates=sortedDates(),overall=dates.map(function(k){var d=dayData(k);return{date:k,value:Number(d.score)||0}});
+ document.getElementById("overallChart").innerHTML=svgLine(overall,13);
  var list=document.getElementById("entryTasks");list.innerHTML="";
  tasks.forEach(function(t){var id=t.dataset.id,count=dates.filter(function(k){return dayData(k).done&&dayData(k).done[id]}).length,b=document.createElement("button");b.className="entryButton";b.innerHTML="<b>"+t.dataset.name+"</b><span>"+count+" erledigt</span>";b.onclick=function(){showTaskHistory(t)};list.appendChild(b)});
 }

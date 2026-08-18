@@ -1,15 +1,17 @@
-Heute Peppe Pro
+Heute Peppe Pro v2
 
-Neu:
-- Vergangene Kalendertage: jede Hauptaufgabe kann einzeln als erledigt/nicht erledigt geändert werden.
-- Punkte jeder einzelnen vergangenen Aufgabe können geändert werden; Gesamtpunkte werden daraus neu berechnet.
-- Bottom-Navigation: Home, Habits, Einträge, Einstellungen.
-- Habits: eigene Habits, Reihenfolge per Pfeiltasten ändern, Farbe frei wählen.
-- Einträge: Kurve der Anzahl erledigter Hauptaufgaben über die Zeit.
-- Unter Einträge jede Hauptaufgabe antippbar; danach Verlaufskurve und Datums-Liste.
-- Einstellungen: JSON-Backup, CSV-Export und Backup-Import.
+Änderungen:
+- Habits werden zuerst angezeigt; Eingabefeld steht darunter.
+- Beschreibung auf der Habits-Seite entfernt.
+- Habits lassen sich weiterhin mit Pfeilen sortieren und zusätzlich per Finger verschieben:
+  auf einen Habit-Bereich kurz gedrückt halten und nach oben/unten ziehen.
+- Home: Editor eines Kalendertages zeigt die Aufgaben in zwei Spalten, damit die Ansicht kürzer bleibt.
+- Einträge: Hauptkurve zeigt jetzt die Gesamtpunkte (0–13) statt nur die Anzahl der Aufgaben.
+- An der Kurve werden Punktwerte und Datumsangaben angezeigt.
+- Es gibt keine separate Habits-Verlaufskurve.
+- Einzelne Hauptaufgaben bleiben unter Einträge anklickbar und zeigen ihren eigenen Verlauf plus Datumsliste.
+- Export/Import bleibt unter Einstellungen.
 
-Update:
-Alle bisherigen Dateien beim Hoster durch diese Dateien ersetzen.
-Danach die Seite in Safari neu laden. Falls iOS noch die alte Version zeigt,
-Homescreen-Icon entfernen und neu über Safari → Teilen → Zum Home-Bildschirm hinzufügen.
+Installation:
+Dateien beim Hoster ersetzen, Safari neu laden. Falls iOS eine alte Version cached,
+Homescreen-App entfernen und anschließend neu über Safari → Teilen → Zum Home-Bildschirm hinzufügen.
